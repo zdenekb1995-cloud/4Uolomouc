@@ -317,6 +317,54 @@
         }
         .gdpr-note strong { color: #4a2e1e; }
 
+        /* ── GDPR FULL TERMS ── */
+        .gdpr-terms {
+            margin-top: 1rem;
+            border: 1px solid rgba(196,149,106,0.35);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .gdpr-terms-toggle {
+            width: 100%;
+            background: rgba(196,149,106,0.08);
+            border: none;
+            padding: 0.85rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #4a2e1e;
+            transition: background 0.2s;
+        }
+        .gdpr-terms-toggle:hover { background: rgba(196,149,106,0.15); }
+        .gdpr-terms-toggle .toggle-icon {
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+        .gdpr-terms-toggle.open .toggle-icon { transform: rotate(180deg); }
+        .gdpr-terms-body {
+            display: none;
+            padding: 1.2rem;
+            background: rgba(196,149,106,0.04);
+            border-top: 1px solid rgba(196,149,106,0.2);
+            font-size: 0.74rem;
+            color: #7a5240;
+            line-height: 1.75;
+        }
+        .gdpr-terms-body.open { display: block; }
+        .gdpr-terms-body ol {
+            padding-left: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        .gdpr-terms-body ol li strong { color: #4a2e1e; }
+
         /* ── SUBMIT ── */
         .btn-submit {
             width: 100%;
@@ -505,6 +553,25 @@
 
             <div class="gdpr-note" id="gdprNoteText">
                 🔒 <strong>GDPR &amp; ochrana údajů</strong> – Vaše osobní údaje a fotografie dokladu jsou zpracovány výhradně pro účely ubytovací evidence dle zákona č. 326/1999 Sb. Údaje nejsou předávány třetím stranám, nejsou dlouhodobě uchovávány a slouží pouze k identifikaci hosta. Po skončení pobytu jsou bezpečně odstraněny.
+            </div>
+
+            <div class="gdpr-terms">
+                <button type="button" class="gdpr-terms-toggle" id="gdprToggleBtn" onclick="toggleGdpr()">
+                    <span id="gdprToggleLabel">📄 GDPR &amp; Podmínky ubytování — zobrazit celý text</span>
+                    <span class="toggle-icon">▼</span>
+                </button>
+                <div class="gdpr-terms-body" id="gdprTermsBody">
+                    <ol id="gdprTermsList">
+                        <li><strong>Zpracování osobních údajů</strong> — Poskytnuté osobní údaje (jméno, příjmení, datum narození, adresa, číslo dokladu totožnosti a případně fotografie dokladu) jsou zpracovávány provozovatelem ubytování výhradně za účelem splnění zákonných povinností, zejména dle zákona č. 326/1999 Sb., o pobytu cizinců, a souvisejících právních předpisů.</li>
+                        <li><strong>Právní základ zpracování</strong> — Zpracování probíhá na základě plnění právní povinnosti a oprávněného zájmu provozovatele (ověření totožnosti ubytované osoby a prevence podvodného jednání).</li>
+                        <li><strong>Rozsah a doba uchování údajů</strong> — Osobní údaje jsou uchovávány pouze po nezbytně nutnou dobu stanovenou právními předpisy. Údaje, které nejsou vyžadovány zákonem, jsou po ukončení pobytu bezodkladně a bezpečně vymazány.</li>
+                        <li><strong>Předávání údajů</strong> — Osobní údaje nejsou předávány třetím stranám, s výjimkou případů stanovených zákonem (např. Policie ČR nebo jiné oprávněné orgány).</li>
+                        <li><strong>Prohlášení hosta</strong> — Prohlašuji, že všechny uvedené údaje jsou pravdivé a že jsem oprávněn/a předložit doklad totožnosti. Beru na vědomí, že uvedení nepravdivých údajů může být považováno za porušení podmínek ubytování.</li>
+                        <li><strong>Odpovědnost za škody</strong> — Souhlasím s tím, že jsem povinen/a neprodleně nahlásit veškeré škody vzniklé během pobytu. Beru na vědomí, že škody, které nebudou nahlášeny a budou zjištěny po ukončení pobytu, mohou být po mně vymáhány.</li>
+                        <li><strong>Práva subjektu údajů</strong> — Beru na vědomí, že mám právo na přístup ke svým osobním údajům, jejich opravu, výmaz nebo omezení zpracování v souladu s Nařízením Evropského parlamentu a Rady (EU) 2016/679 (GDPR).</li>
+                        <li><strong>Souhlas</strong> — Potvrzuji, že jsem si výše uvedené podmínky přečetl/a, porozuměl/a jim a souhlasím s nimi.</li>
+                    </ol>
+                </div>
             </div>
 
             <button type="submit" class="btn-submit" id="submitBtn">
@@ -708,6 +775,13 @@
             $('submitBtn').disabled = false;
         }
     });
+
+    function toggleGdpr() {
+        const btn  = document.getElementById('gdprToggleBtn');
+        const body = document.getElementById('gdprTermsBody');
+        const isOpen = body.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+    }
 
     // ── PŘEKLADY ──
     const T = {
