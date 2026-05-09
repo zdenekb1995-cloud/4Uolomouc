@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>4U Olomouc | Check-in hosta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #ede5d8;
+            color: #2e1a0e;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── PAGE WRAP ── */
+        .page-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* ── LANG ── */
+        .lang-switch {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .lang-btn {
+            background: rgba(74,46,30,0.07);
+            border: 1px solid rgba(74,46,30,0.18);
+            color: #96634a;
+            padding: 0.35rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, #4a2e1e, #6b4232);
+            border-color: transparent;
+            color: #faf6f0;
+        }
+        .lang-btn:hover:not(.active) {
+            border-color: #c4956a;
+            color: #4a2e1e;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(74,46,30,0.1);
+            border: 1px solid rgba(196,149,106,0.4);
+            border-radius: 40px;
+            padding: 0.4rem 1.3rem;
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #6b4232;
+            margin-bottom: 1.2rem;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #2e1a0e 30%, #c4956a 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+        .hero-sub {
+            font-size: 0.82rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #96634a;
+            font-weight: 500;
+        }
+        .hero-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0;
+        }
+        .hero-divider::before, .hero-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(196,149,106,0.5), transparent);
+        }
+        .hero-divider-dot {
+            width: 6px; height: 6px;
+            background: #c4956a;
+            border-radius: 50%;
+        }
+
+        /* ── CARD ── */
+        .form-card {
+            background: #faf6f0;
+            border: 1px solid rgba(74,46,30,0.12);
+            border-radius: 28px;
+            padding: 2.2rem 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(74,46,30,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c4956a, #4a2e1e, transparent);
+        }
+
+        .card-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #6b4232;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .card-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(74,46,30,0.1);
+        }
+        .card-desc {
+            font-size: 0.8rem;
+            color: #96634a;
+            margin-bottom: 1.8rem;
+            font-weight: 400;
+        }
+
+        /* ── FIELDS ── */
+        .form-row { margin-bottom: 1.2rem; }
+        label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #7a5240;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 0.85rem 1.1rem;
+            background: #f0e9de;
+            border: 1.5px solid #d9cfc0;
+            border-radius: 14px;
+            color: #2e1a0e;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 400;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b4232' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+            cursor: pointer;
+            background-color: #f0e9de;
+        }
+        select option { background: #faf6f0; color: #2e1a0e; }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4a2e1e;
+            box-shadow: 0 0 0 3px rgba(74,46,30,0.1);
+        }
+        input::placeholder { color: rgba(46,26,14,0.3); font-size: 0.9rem; }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: sepia(1) saturate(2) hue-rotate(330deg) brightness(0.6);
+            cursor: pointer;
+        }
+
+        .double-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+        .double-group > div { flex: 1; min-width: 180px; }
+
+        /* ── PHOTO ── */
+        .camera-area {
+            background: rgba(74,46,30,0.04);
+            border: 1px dashed rgba(196,149,106,0.5);
+            border-radius: 14px;
+            padding: 1.2rem;
+            margin-top: 0.5rem;
+            transition: border-color 0.2s;
+        }
+        .camera-area:hover { border-color: #c4956a; }
+        .photo-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .preview-img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 10px;
+            border: 1px solid rgba(196,149,106,0.4);
+            background: #e6ddd0;
+            object-fit: contain;
+        }
+        .btn-photo {
+            background: rgba(74,46,30,0.08);
+            border: 1px solid rgba(196,149,106,0.6);
+            color: #6b4232;
+            padding: 0.5rem 1.3rem;
+            border-radius: 40px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-photo:hover {
+            background: #4a2e1e;
+            color: #faf6f0;
+            border-color: #4a2e1e;
+        }
+        .upload-progress {
+            width: 100%;
+            background: rgba(74,46,30,0.08);
+            border-radius: 20px;
+            height: 4px;
+            overflow: hidden;
+            display: none;
+            margin-top: 6px;
+        }
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6b4232, #c4956a);
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.4s;
+        }
+        .upload-status {
+            font-size: 0.72rem;
+            color: #6b4232;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── CHECKBOXES ── */
+        .checkbox-group {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            background: rgba(74,46,30,0.04);
+            padding: 1.1rem;
+            border-radius: 14px;
+            border: 1px solid rgba(74,46,30,0.1);
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 18px; height: 18px; min-width: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: #4a2e1e;
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0;
+            text-transform: none;
+            color: #5a3826;
+            margin: 0;
+            cursor: pointer;
+            line-height: 1.55;
+        }
+        .checkbox-group label strong { color: #4a2e1e; }
+
+        /* ── GDPR NOTE ── */
+        .gdpr-note {
+            font-size: 0.75rem;
+            background: rgba(196,149,106,0.1);
+            padding: 1rem 1.2rem;
+            border-radius: 0 14px 14px 0;
+            color: #7a5240;
+            margin-top: 1rem;
+            border-left: 2px solid #c4956a;
+            line-height: 1.65;
+        }
+        .gdpr-note strong { color: #4a2e1e; }
+
+        /* ── SUBMIT ── */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4a2e1e, #6b4232);
+            border: none;
+            border-radius: 14px;
+            color: #faf6f0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 8px 24px rgba(74,46,30,0.3);
+        }
+        .btn-submit:hover { background: linear-gradient(135deg, #6b4232, #96634a); box-shadow: 0 14px 30px rgba(74,46,30,0.35); transform: translateY(-2px); }
+        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* ── MESSAGE ── */
+        .message-box {
+            margin-top: 1rem;
+            padding: 0.9rem 1.2rem;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+        }
+        .message-box.show { display: block; }
+        .message-box.success { background: rgba(40,120,60,0.12); border: 1px solid rgba(40,180,80,0.3); color: #2d7a45; }
+        .message-box.error   { background: rgba(180,60,40,0.12); border: 1px solid rgba(200,80,60,0.3); color: #a03020; }
+        .message-box.loading { background: rgba(196,149,106,0.12); border: 1px solid rgba(196,149,106,0.3); color: #6b4232; }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #4a2e1e;
+            border-top: 1px solid rgba(74,46,30,0.2);
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(250,246,240,0.55);
+            margin-top: 1rem;
+            line-height: 1.9;
+        }
+        footer a { color: #dab48a; text-decoration: none; }
+        footer a:hover { color: #faf6f0; }
+        footer strong { color: rgba(250,246,240,0.7); }
+
+        @media (max-width: 520px) {
+            .form-card { padding: 1.5rem 1.1rem; }
+            .hero h1 { font-size: 1.9rem; }
+            .double-group > div { min-width: 100%; }
+            .nav-contact { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+    <!-- LANG -->
+    <div class="lang-switch">
+        <button class="lang-btn active" data-lang="cs">🇨🇿 ČESKY</button>
+        <button class="lang-btn" data-lang="en">🇬🇧 ENGLISH</button>
+        <button class="lang-btn" data-lang="de">🇩🇪 DEUTSCH</button>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-badge"><i class="fas fa-map-marker-alt"></i> &nbsp;Olomouc – Litovelská 2b / Letců 29</div>
+        <h1 id="heroTitle">4U OLOMOUC<br>CHECK-IN</h1>
+        <div class="hero-sub" id="heroSub">Luxusní krátkodobé apartmány · Parkování zdarma</div>
+        <div class="hero-divider"><div class="hero-divider-dot"></div></div>
+    </div>
+
+    <form id="checkinForm" novalidate>
+
+        <!-- KARTA 1 – osobní údaje -->
+        <div class="form-card">
+            <div class="card-title" id="cardTitle1"><i class="fas fa-user"></i> &nbsp;Povinný check‑in formulář</div>
+            <p class="card-desc" id="formDesc">Podle zákona č. 326/1999 Sb. a GDPR evidujeme totožnost hosta.</p>
+
+            <div class="form-row">
+                <label id="labelName">Jméno a příjmení *</label>
+                <input type="text" name="Jméno" id="fullname" required placeholder="Jana Nováková">
+            </div>
+
+            <div class="double-group">
+                <div>
+                    <label id="labelBirth">Datum narození *</label>
+                    <input type="date" name="Datum_narozeni" id="birthdate" required>
+                </div>
+                <div>
+                    <label id="labelIdNum">Číslo OP / pasu *</label>
+                    <input type="text" name="Cislo_OP" id="idNumber" required placeholder="CZ1234567">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label id="labelEmail">E-mail *</label>
+                <input type="email" name="email" id="email" required placeholder="host@email.cz">
+            </div>
+
+            <div class="double-group">
+                <div>
+                    <label id="labelPhone">Telefon *</label>
+                    <input type="tel" name="Telefon" id="phone" required placeholder="+420 705 009 727" inputmode="numeric">
+                </div>
+                <div>
+                    <label id="labelApartment">Vyberte apartmán *</label>
+                    <select name="Apartman" id="apartment" required>
+                        <option value="">— vyberte —</option>
+                        <option value="Apartmán 40m² – Litovelská 2b (1 490 Kč/noc)">Apartmán 40m² | 1 490 Kč/noc | Litovelská</option>
+                        <option value="Apartmán 34m² – Litovelská 2b (1 420 Kč/noc)">Apartmán 34m² | 1 420 Kč/noc | Litovelská</option>
+                        <option value="Apartmán Letců 29 (1 320 Kč/noc)">Apartmán Letců 29 | 1 320 Kč/noc</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 2 – doklad -->
+        <div class="form-card">
+            <div class="card-title" id="cardTitle2"><i class="fas fa-id-card"></i> &nbsp;Doklad totožnosti</div>
+
+            <div class="form-row">
+                <label id="labelPhotoFront">📸 Přední strana dokladu *</label>
+                <div class="camera-area">
+                    <div class="photo-preview">
+                        <img id="frontPreview" class="preview-img"
+                             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='120' viewBox='0 0 220 120'%3E%3Crect width='220' height='120' fill='%23e6ddd0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2396634a' font-size='11' font-family='sans-serif'%3EP%C5%99edn%C3%AD strana dokladu%3C/text%3E%3C/svg%3E"
+                             alt="Přední strana dokladu">
+                        <input type="file" id="frontPhotoInput" accept="image/jpeg,image/png,image/jpg" style="display:none;">
+                        <button type="button" class="btn-photo" id="takeFrontPhotoBtn">📷 Nahrát přední stranu dokladu</button>
+                        <div class="upload-progress" id="frontUploadProgress">
+                            <div class="upload-progress-bar" id="frontProgressBar"></div>
+                        </div>
+                        <div class="upload-status" id="frontUploadStatus"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label id="labelPhotoBack">📸 Zadní strana dokladu *</label>
+                <div class="camera-area">
+                    <div class="photo-preview">
+                        <img id="backPreview" class="preview-img"
+                             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='120' viewBox='0 0 220 120'%3E%3Crect width='220' height='120' fill='%23e6ddd0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2396634a' font-size='11' font-family='sans-serif'%3EZadn%C3%AD strana dokladu%3C/text%3E%3C/svg%3E"
+                             alt="Zadní strana dokladu">
+                        <input type="file" id="backPhotoInput" accept="image/jpeg,image/png,image/jpg" style="display:none;">
+                        <button type="button" class="btn-photo" id="takeBackPhotoBtn">📷 Nahrát zadní stranu dokladu</button>
+                        <div class="upload-progress" id="backUploadProgress">
+                            <div class="upload-progress-bar" id="backProgressBar"></div>
+                        </div>
+                        <div class="upload-status" id="backUploadStatus"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 3 – souhlas -->
+        <div class="form-card">
+            <div class="card-title" id="cardTitle3"><i class="fas fa-shield-alt"></i> &nbsp;Souhlas &amp; podmínky</div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="gdprCheck" required>
+                <label id="labelGdpr" for="gdprCheck">
+                    <strong>Souhlasím se zpracováním osobních údajů</strong> dle nařízení GDPR.
+                </label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="damageCheck" required>
+                <label id="labelDamage" for="damageCheck">
+                    <strong>Zodpovědnost za škody</strong> – Beru na vědomí, že veškeré závady jsem povinen hlásit neprodleně po příjezdu. V případě prokázané škody jsem povinen ji plně nahradit.
+                </label>
+            </div>
+
+            <div class="gdpr-note" id="gdprNoteText">
+                🔒 <strong>GDPR &amp; ochrana údajů</strong> – Vaše osobní údaje a fotografie dokladu jsou zpracovány výhradně pro účely ubytovací evidence dle zákona č. 326/1999 Sb. Údaje nejsou předávány třetím stranám, nejsou dlouhodobě uchovávány a slouží pouze k identifikaci hosta. Po skončení pobytu jsou bezpečně odstraněny.
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+                <i class="fas fa-paper-plane"></i> &nbsp;ODESLAT CHECK-IN
+            </button>
+            <div id="formMessage" class="message-box"></div>
+        </div>
+
+    </form>
+</div>
+
+<footer>
+    <p><i class="far fa-copyright"></i> 2025 4U Olomouc – Krátkodobé apartmány s parkováním zdarma</p>
+    <p>Litovelská 2b &amp; Letců 29, Olomouc</p>
+    <p>
+        <i class="fas fa-phone-alt" style="color:#c4956a;"></i> <a href="tel:+420705009727">+420 705 009 727</a>
+        &nbsp;|&nbsp;
+        <i class="fas fa-envelope" style="color:#6b4232;"></i> <a href="mailto:apartman4Uolomouc@seznam.cz">apartman4Uolomouc@seznam.cz</a>
+        &nbsp;|&nbsp;
+        <i class="fab fa-whatsapp" style="color:#6b4232;"></i> <a href="https://wa.me/420705009727">WhatsApp</a>
+    </p>
+</footer>
+
+<script>
+    // ── CONFIG ──
+    const IMGBB_API_KEY = '3d26ca2e85ce3764e2f7a87129d16f06';
+    const FORMSPREE_URL = 'https://formspree.io/f/xvzlqdyz';
+
+    let frontFile = null, backFile = null, isSubmitting = false;
+    const $ = id => document.getElementById(id);
+
+    // Phone filter
+    const phoneInput = $('phone');
+    phoneInput.addEventListener('input', function() {
+        let v = this.value.replace(/[^\d+]/g, '');
+        if ((v.match(/\+/g)||[]).length > 1) { v = v.replace(/\+/g,''); v = '+' + v; }
+        if (!v.startsWith('+')) v = v.replace(/\+/g,'');
+        this.value = v;
+    });
+    phoneInput.addEventListener('paste', function(e) {
+        e.preventDefault();
+        let v = (e.clipboardData||window.clipboardData).getData('text').replace(/[^\d+]/g,'');
+        if (!v.startsWith('+')) v = v.replace(/\+/g,'');
+        this.value = v;
+    });
+
+    // Photo binding
+    function bindPhoto(inputId, previewId, btnId, progressId, barId, statusId, side) {
+        const input = $(inputId), preview = $(previewId), btn = $(btnId),
+              prog = $(progressId), bar = $(barId), status = $(statusId);
+        btn.addEventListener('click', () => input.click());
+        input.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
+                alert('Povoleny jsou pouze formáty JPG/PNG.'); input.value = ''; return;
+            }
+            if (file.size > 5*1024*1024) {
+                alert('Maximální velikost souboru je 5 MB.'); input.value = ''; return;
+            }
+            const reader = new FileReader();
+            reader.onload = ev => preview.src = ev.target.result;
+            reader.readAsDataURL(file);
+            if (side === 'front') frontFile = file; else backFile = file;
+            status.textContent = '✅ Foto připraveno';
+        });
+    }
+
+    bindPhoto('frontPhotoInput','frontPreview','takeFrontPhotoBtn','frontUploadProgress','frontProgressBar','frontUploadStatus','front');
+    bindPhoto('backPhotoInput','backPreview','takeBackPhotoBtn','backUploadProgress','backProgressBar','backUploadStatus','back');
+
+    function uploadToImgBB(file, bar, status) {
+        return new Promise((resolve, reject) => {
+            const fd = new FormData();
+            fd.append('image', file);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, true);
+            xhr.upload.onprogress = e => {
+                if (e.lengthComputable) {
+                    const p = Math.round(e.loaded / e.total * 100);
+                    bar.style.width = p + '%';
+                    status.textContent = `📤 nahrávám... ${p}%`;
+                }
+            };
+            xhr.onload = () => {
+                const d = JSON.parse(xhr.responseText);
+                if (xhr.status === 200 && d.success) resolve(d.data.url);
+                else reject(new Error(d.error?.message || 'Chyba uploadu'));
+            };
+            xhr.onerror = () => reject(new Error('Síťová chyba'));
+            xhr.send(fd);
+        });
+    }
+
+    function showMessage(msg, type) {
+        const box = $('formMessage');
+        box.textContent = msg;
+        box.className = 'message-box show ' + type;
+        if (type !== 'loading') setTimeout(() => box.classList.remove('show'), 6000);
+    }
+
+    function resetForm() {
+        $('checkinForm').reset();
+        frontFile = null; backFile = null;
+        $('frontPhotoInput').value = ''; $('backPhotoInput').value = '';
+        const blankSvg = (label) => `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='120' viewBox='0 0 220 120'%3E%3Crect width='220' height='120' fill='%23e6ddd0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2396634a' font-size='11' font-family='sans-serif'%3E${label}%3C/text%3E%3C/svg%3E`;
+        $('frontPreview').src = blankSvg('P%C5%99edn%C3%AD%20strana%20dokladu');
+        $('backPreview').src  = blankSvg('Zadn%C3%AD%20strana%20dokladu');
+        $('frontUploadStatus').textContent = ''; $('backUploadStatus').textContent = '';
+        $('frontUploadProgress').style.display = 'none'; $('backUploadProgress').style.display = 'none';
+        setTimeout(() => $('formMessage').classList.remove('show'), 5000);
+    }
+
+    $('checkinForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        if (isSubmitting) { showMessage('Odesílání probíhá, počkejte prosím…', 'loading'); return; }
+
+        const fullname  = $('fullname').value.trim();
+        const birthdate = $('birthdate').value.trim();
+        const idNumber  = $('idNumber').value.trim();
+        const email     = $('email').value.trim();
+        const phone     = $('phone').value.trim();
+        const apartment = $('apartment').value;
+        const gdpr      = $('gdprCheck').checked;
+        const damage    = $('damageCheck').checked;
+
+        if (!fullname || !birthdate || !idNumber || !email || !phone || !apartment) {
+            showMessage('❌ Vyplňte všechna povinná pole.', 'error'); return;
+        }
+        if (!email.includes('@') || !email.includes('.')) {
+            showMessage('❌ Zadejte platný e-mail.', 'error'); return;
+        }
+        if (phone.replace(/\D/g,'').length < 9) {
+            showMessage('❌ Zadejte platné telefonní číslo (min. 9 číslic).', 'error'); return;
+        }
+        if (!frontFile) { showMessage('❌ Nahrajte přední stranu dokladu.', 'error'); return; }
+        if (!backFile)  { showMessage('❌ Nahrajte zadní stranu dokladu.', 'error'); return; }
+        if (!gdpr || !damage) { showMessage('❌ Musíte souhlasit s podmínkami.', 'error'); return; }
+
+        isSubmitting = true;
+        $('submitBtn').disabled = true;
+        showMessage('⏳ Nahrávám fotografie…', 'loading');
+
+        $('frontUploadProgress').style.display = 'block';
+        $('backUploadProgress').style.display  = 'block';
+        $('frontProgressBar').style.width = '0%';
+        $('backProgressBar').style.width  = '0%';
+
+        let frontUrl, backUrl;
+        try {
+            frontUrl = await uploadToImgBB(frontFile, $('frontProgressBar'), $('frontUploadStatus'));
+            $('frontUploadStatus').textContent = '✅ nahráno';
+            backUrl  = await uploadToImgBB(backFile,  $('backProgressBar'),  $('backUploadStatus'));
+            $('backUploadStatus').textContent  = '✅ nahráno';
+        } catch(err) {
+            showMessage('❌ Chyba nahrávání fotografií: ' + err.message, 'error');
+            isSubmitting = false; $('submitBtn').disabled = false;
+            return;
+        }
+
+        showMessage('⏳ Odesílám data…', 'loading');
+
+        const payload = {
+            _subject: '🏨 NOVÝ CHECK-IN – 4U Olomouc',
+            Jméno: fullname,
+            Datum_narozeni: birthdate,
+            Cislo_OP: idNumber,
+            email: email,
+            Telefon: phone,
+            Apartman: apartment,
+            GDPR_souhlas: 'Ano',
+            Zodpovednost_za_skody: 'Ano',
+            Predni_strana_dokladu: frontUrl,
+            Zadni_strana_dokladu: backUrl,
+            Cas_odeslani: new Date().toLocaleString('cs-CZ')
+        };
+
+        try {
+            const resp = await fetch(FORMSPREE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await resp.json();
+            if (resp.ok) {
+                showMessage('✅ Check-in úspěšně odeslán! Potvrzení přijde na e-mail.', 'success');
+                resetForm();
+            } else {
+                const errMsg = result.errors ? result.errors.map(e => e.message).join(', ') : 'Chyba odeslání';
+                showMessage('❌ ' + errMsg, 'error');
+            }
+        } catch(err) {
+            showMessage('❌ Selhalo spojení, zkuste to znovu.', 'error');
+        } finally {
+            isSubmitting = false;
+            $('submitBtn').disabled = false;
+        }
+    });
+
+    // ── PŘEKLADY ──
+    const T = {
+        cs: {
+            heroTitle: '4U OLOMOUC<br>CHECK-IN',
+            heroSub: 'Luxusní krátkodobé apartmány · Parkování zdarma',
+            cardTitle1: '<i class="fas fa-user"></i> &nbsp;Povinný check‑in formulář',
+            cardTitle2: '<i class="fas fa-id-card"></i> &nbsp;Doklad totožnosti',
+            cardTitle3: '<i class="fas fa-shield-alt"></i> &nbsp;Souhlas &amp; podmínky',
+            formDesc: 'Podle zákona č. 326/1999 Sb. a GDPR evidujeme totožnost hosta.',
+            labelName: 'Jméno a příjmení *',
+            labelBirth: 'Datum narození *',
+            labelIdNum: 'Číslo OP / pasu *',
+            labelEmail: 'E-mail *',
+            labelPhone: 'Telefon *',
+            labelApartment: 'Vyberte apartmán *',
+            labelPhotoFront: '📸 Přední strana dokladu *',
+            labelPhotoBack:  '📸 Zadní strana dokladu *',
+            btnFront: '📷 Nahrát přední stranu dokladu',
+            btnBack:  '📷 Nahrát zadní stranu dokladu',
+            labelGdpr:   '<strong>Souhlasím se zpracováním osobních údajů</strong> dle nařízení GDPR.',
+            labelDamage: '<strong>Zodpovědnost za škody</strong> – Beru na vědomí, že veškeré závady jsem povinen hlásit neprodleně po příjezdu. V případě prokázané škody jsem povinen ji plně nahradit.',
+            gdprNote: '🔒 <strong>GDPR &amp; ochrana údajů</strong> – Vaše osobní údaje a fotografie dokladu jsou zpracovány výhradně pro účely ubytovací evidence dle zákona č. 326/1999 Sb. Údaje nejsou předávány třetím stranám, nejsou dlouhodobě uchovávány. Po skončení pobytu jsou bezpečně odstraněny.',
+            btnSubmit: '<i class="fas fa-paper-plane"></i> &nbsp;ODESLAT CHECK-IN'
+        },
+        en: {
+            heroTitle: '4U OLOMOUC<br>CHECK-IN',
+            heroSub: 'Luxury short-stay apartments · Free parking',
+            cardTitle1: '<i class="fas fa-user"></i> &nbsp;Mandatory check-in form',
+            cardTitle2: '<i class="fas fa-id-card"></i> &nbsp;Identity document',
+            cardTitle3: '<i class="fas fa-shield-alt"></i> &nbsp;Consent &amp; conditions',
+            formDesc: 'According to Act No. 326/1999 Coll. and GDPR, we are required to register guest identity.',
+            labelName: 'Full Name *',
+            labelBirth: 'Date of Birth *',
+            labelIdNum: 'ID / Passport Number *',
+            labelEmail: 'Email *',
+            labelPhone: 'Phone *',
+            labelApartment: 'Select Apartment *',
+            labelPhotoFront: '📸 Front side of ID document *',
+            labelPhotoBack:  '📸 Back side of ID document *',
+            btnFront: '📷 Upload front side of ID',
+            btnBack:  '📷 Upload back side of ID',
+            labelGdpr:   '<strong>I consent to the processing of personal data</strong> in accordance with GDPR.',
+            labelDamage: '<strong>Liability for damages</strong> – I acknowledge that I must report any defects immediately upon arrival. If it is proven that I caused damage, I am obliged to fully compensate it.',
+            gdprNote: '🔒 <strong>GDPR &amp; data protection</strong> – Your personal data and ID photos are processed solely for accommodation registration under Act No. 326/1999 Coll. Data is not shared with third parties and is securely deleted after your stay.',
+            btnSubmit: '<i class="fas fa-paper-plane"></i> &nbsp;SUBMIT CHECK-IN'
+        },
+        de: {
+            heroTitle: '4U OLOMOUC<br>CHECK-IN',
+            heroSub: 'Luxus-Kurzzeitapartments · Kostenloses Parken',
+            cardTitle1: '<i class="fas fa-user"></i> &nbsp;Pflicht-Check-in-Formular',
+            cardTitle2: '<i class="fas fa-id-card"></i> &nbsp;Ausweisdokument',
+            cardTitle3: '<i class="fas fa-shield-alt"></i> &nbsp;Zustimmung &amp; Bedingungen',
+            formDesc: 'Gemäß Gesetz Nr. 326/1999 Sb. und DSGVO erfassen wir die Identität des Gastes.',
+            labelName: 'Vor- und Nachname *',
+            labelBirth: 'Geburtsdatum *',
+            labelIdNum: 'Personalausweis / Passnummer *',
+            labelEmail: 'E-Mail *',
+            labelPhone: 'Telefon *',
+            labelApartment: 'Apartment wählen *',
+            labelPhotoFront: '📸 Vorderseite des Ausweises *',
+            labelPhotoBack:  '📸 Rückseite des Ausweises *',
+            btnFront: '📷 Vorderseite hochladen',
+            btnBack:  '📷 Rückseite hochladen',
+            labelGdpr:   '<strong>Ich stimme der Verarbeitung personenbezogener Daten</strong> gemäß DSGVO zu.',
+            labelDamage: '<strong>Haftung für Schäden</strong> – Ich bestätige, dass ich alle Mängel sofort nach Ankunft melden muss. Bei nachgewiesenem Schaden bin ich verpflichtet, diesen vollständig zu ersetzen.',
+            gdprNote: '🔒 <strong>DSGVO &amp; Datenschutz</strong> – Ihre Daten und Ausweisfotos werden ausschließlich für die Meldepflicht gemäß Gesetz Nr. 326/1999 Sb. verarbeitet und nach dem Aufenthalt sicher gelöscht.',
+            btnSubmit: '<i class="fas fa-paper-plane"></i> &nbsp;CHECK-IN SENDEN'
+        }
+    };
+
+    function setLang(lang) {
+        const t = T[lang];
+        if (!t) return;
+        $('heroTitle').innerHTML        = t.heroTitle;
+        $('heroSub').innerHTML          = t.heroSub;
+        $('cardTitle1').innerHTML       = t.cardTitle1;
+        $('cardTitle2').innerHTML       = t.cardTitle2;
+        $('cardTitle3').innerHTML       = t.cardTitle3;
+        $('formDesc').innerHTML         = t.formDesc;
+        $('labelName').innerHTML        = t.labelName;
+        $('labelBirth').innerHTML       = t.labelBirth;
+        $('labelIdNum').innerHTML       = t.labelIdNum;
+        $('labelEmail').innerHTML       = t.labelEmail;
+        $('labelPhone').innerHTML       = t.labelPhone;
+        $('labelApartment').innerHTML   = t.labelApartment;
+        $('labelPhotoFront').innerHTML  = t.labelPhotoFront;
+        $('labelPhotoBack').innerHTML   = t.labelPhotoBack;
+        $('takeFrontPhotoBtn').innerHTML = t.btnFront;
+        $('takeBackPhotoBtn').innerHTML  = t.btnBack;
+        $('labelGdpr').innerHTML        = t.labelGdpr;
+        $('labelDamage').innerHTML      = t.labelDamage;
+        $('gdprNoteText').innerHTML     = t.gdprNote;
+        $('submitBtn').innerHTML        = t.btnSubmit;
+        document.querySelectorAll('.lang-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.lang === lang);
+        });
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+    setLang('cs');
+</script>
+</body>
+</html>
