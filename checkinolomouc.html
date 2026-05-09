@@ -414,8 +414,24 @@
                     <input type="date" name="Datum_narozeni" id="birthdate" required>
                 </div>
                 <div>
-                    <label id="labelIdNum">Číslo OP / pasu *</label>
-                    <input type="text" name="Cislo_OP" id="idNumber" required placeholder="CZ1234567">
+                    <label id="labelStayFrom">Pobyt od *</label>
+                    <input type="date" name="Pobyt_od" id="stayFrom" required>
+                </div>
+            </div>
+
+            <div class="double-group">
+                <div>
+                    <label id="labelStayTo">Pobyt do *</label>
+                    <input type="date" name="Pobyt_do" id="stayTo" required>
+                </div>
+                <div>
+                    <label id="labelApartment">Vyberte apartmán *</label>
+                    <select name="Apartman" id="apartment" required>
+                        <option value="">— vyberte —</option>
+                        <option value="Apartmán 1 – Litovelská 2b">Apartmán 1 – Litovelská 2b</option>
+                        <option value="Apartmán 2 – Litovelská 2b">Apartmán 2 – Litovelská 2b</option>
+                        <option value="Apartmán 3 – Letců 29">Apartmán 3 – Letců 29</option>
+                    </select>
                 </div>
             </div>
 
@@ -424,20 +440,9 @@
                 <input type="email" name="email" id="email" required placeholder="host@email.cz">
             </div>
 
-            <div class="double-group">
-                <div>
-                    <label id="labelPhone">Telefon *</label>
-                    <input type="tel" name="Telefon" id="phone" required placeholder="+420 728 948 738" inputmode="numeric">
-                </div>
-                <div>
-                    <label id="labelApartment">Vyberte apartmán *</label>
-                    <select name="Apartman" id="apartment" required>
-                        <option value="">— vyberte —</option>
-                        <option value="Apartmán 40m² – Litovelská 2b (1 490 Kč/noc)">Apartmán 40m² | 1 490 Kč/noc | Litovelská</option>
-                        <option value="Apartmán 34m² – Litovelská 2b (1 420 Kč/noc)">Apartmán 34m² | 1 420 Kč/noc | Litovelská</option>
-                        <option value="Apartmán Letců 29 (1 320 Kč/noc)">Apartmán Letců 29 | 1 320 Kč/noc</option>
-                    </select>
-                </div>
+            <div class="form-row">
+                <label id="labelPhone">Telefon *</label>
+                <input type="tel" name="Telefon" id="phone" required placeholder="+420 728 948 738" inputmode="numeric">
             </div>
         </div>
 
@@ -605,9 +610,9 @@
         $('checkinForm').reset();
         frontFile = null; backFile = null;
         $('frontPhotoInput').value = ''; $('backPhotoInput').value = '';
-        const blankSvg = (label) => `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='120' viewBox='0 0 220 120'%3E%3Crect width='220' height='120' fill='%23e6ddd0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2396634a' font-size='11' font-family='sans-serif'%3E${label}%3C/text%3E%3C/svg%3E`;
-        $('frontPreview').src = blankSvg('P%C5%99edn%C3%AD%20strana%20dokladu');
-        $('backPreview').src  = blankSvg('Zadn%C3%AD%20strana%20dokladu');
+        const t = T[currentLang] || T['cs'];
+        $('frontPreview').src = blankSvg(t.svgFront);
+        $('backPreview').src  = blankSvg(t.svgBack);
         $('frontUploadStatus').textContent = ''; $('backUploadStatus').textContent = '';
         $('frontUploadProgress').style.display = 'none'; $('backUploadProgress').style.display = 'none';
         setTimeout(() => $('formMessage').classList.remove('show'), 5000);
@@ -619,15 +624,19 @@
 
         const fullname  = $('fullname').value.trim();
         const birthdate = $('birthdate').value.trim();
-        const idNumber  = $('idNumber').value.trim();
+        const stayFrom  = $('stayFrom').value.trim();
+        const stayTo    = $('stayTo').value.trim();
         const email     = $('email').value.trim();
         const phone     = $('phone').value.trim();
         const apartment = $('apartment').value;
         const gdpr      = $('gdprCheck').checked;
         const damage    = $('damageCheck').checked;
 
-        if (!fullname || !birthdate || !idNumber || !email || !phone || !apartment) {
+        if (!fullname || !birthdate || !stayFrom || !stayTo || !email || !phone || !apartment) {
             showMessage('❌ Vyplňte všechna povinná pole.', 'error'); return;
+        }
+        if (stayTo <= stayFrom) {
+            showMessage('❌ Datum odjezdu musí být po datu příjezdu.', 'error'); return;
         }
         if (!email.includes('@') || !email.includes('.')) {
             showMessage('❌ Zadejte platný e-mail.', 'error'); return;
@@ -666,7 +675,8 @@
             _subject: '🏨 NOVÝ CHECK-IN – 4U Olomouc',
             Jméno: fullname,
             Datum_narozeni: birthdate,
-            Cislo_OP: idNumber,
+            Pobyt_od: stayFrom,
+            Pobyt_do: stayTo,
             email: email,
             Telefon: phone,
             Apartman: apartment,
@@ -710,7 +720,8 @@
             formDesc: 'Podle zákona č. 326/1999 Sb. a GDPR evidujeme totožnost hosta.',
             labelName: 'Jméno a příjmení *',
             labelBirth: 'Datum narození *',
-            labelIdNum: 'Číslo OP / pasu *',
+            labelStayFrom: 'Pobyt od *',
+            labelStayTo: 'Pobyt do *',
             labelEmail: 'E-mail *',
             labelPhone: 'Telefon *',
             labelApartment: 'Vyberte apartmán *',
@@ -718,6 +729,8 @@
             labelPhotoBack:  '📸 Zadní strana dokladu *',
             btnFront: '📷 Nahrát přední stranu dokladu',
             btnBack:  '📷 Nahrát zadní stranu dokladu',
+            svgFront: 'P%C5%99edn%C3%AD%20strana%20dokladu',
+            svgBack:  'Zadn%C3%AD%20strana%20dokladu',
             labelGdpr:   '<strong>Souhlasím se zpracováním osobních údajů</strong> dle nařízení GDPR.',
             labelDamage: '<strong>Zodpovědnost za škody</strong> – Beru na vědomí, že veškeré závady jsem povinen hlásit neprodleně po příjezdu. V případě prokázané škody jsem povinen ji plně nahradit.',
             gdprNote: '🔒 <strong>GDPR &amp; ochrana údajů</strong> – Vaše osobní údaje a fotografie dokladu jsou zpracovány výhradně pro účely ubytovací evidence dle zákona č. 326/1999 Sb. Údaje nejsou předávány třetím stranám, nejsou dlouhodobě uchovávány. Po skončení pobytu jsou bezpečně odstraněny.',
@@ -732,7 +745,8 @@
             formDesc: 'According to Act No. 326/1999 Coll. and GDPR, we are required to register guest identity.',
             labelName: 'Full Name *',
             labelBirth: 'Date of Birth *',
-            labelIdNum: 'ID / Passport Number *',
+            labelStayFrom: 'Stay from *',
+            labelStayTo: 'Stay until *',
             labelEmail: 'Email *',
             labelPhone: 'Phone *',
             labelApartment: 'Select Apartment *',
@@ -740,6 +754,8 @@
             labelPhotoBack:  '📸 Back side of ID document *',
             btnFront: '📷 Upload front side of ID',
             btnBack:  '📷 Upload back side of ID',
+            svgFront: 'Front%20side%20of%20ID',
+            svgBack:  'Back%20side%20of%20ID',
             labelGdpr:   '<strong>I consent to the processing of personal data</strong> in accordance with GDPR.',
             labelDamage: '<strong>Liability for damages</strong> – I acknowledge that I must report any defects immediately upon arrival. If it is proven that I caused damage, I am obliged to fully compensate it.',
             gdprNote: '🔒 <strong>GDPR &amp; data protection</strong> – Your personal data and ID photos are processed solely for accommodation registration under Act No. 326/1999 Coll. Data is not shared with third parties and is securely deleted after your stay.',
@@ -754,7 +770,8 @@
             formDesc: 'Gemäß Gesetz Nr. 326/1999 Sb. und DSGVO erfassen wir die Identität des Gastes.',
             labelName: 'Vor- und Nachname *',
             labelBirth: 'Geburtsdatum *',
-            labelIdNum: 'Personalausweis / Passnummer *',
+            labelStayFrom: 'Aufenthalt von *',
+            labelStayTo: 'Aufenthalt bis *',
             labelEmail: 'E-Mail *',
             labelPhone: 'Telefon *',
             labelApartment: 'Apartment wählen *',
@@ -762,6 +779,8 @@
             labelPhotoBack:  '📸 Rückseite des Ausweises *',
             btnFront: '📷 Vorderseite hochladen',
             btnBack:  '📷 Rückseite hochladen',
+            svgFront: 'Vorderseite%20Ausweis',
+            svgBack:  'R%C3%BCckseite%20Ausweis',
             labelGdpr:   '<strong>Ich stimme der Verarbeitung personenbezogener Daten</strong> gemäß DSGVO zu.',
             labelDamage: '<strong>Haftung für Schäden</strong> – Ich bestätige, dass ich alle Mängel sofort nach Ankunft melden muss. Bei nachgewiesenem Schaden bin ich verpflichtet, diesen vollständig zu ersetzen.',
             gdprNote: '🔒 <strong>DSGVO &amp; Datenschutz</strong> – Ihre Daten und Ausweisfotos werden ausschließlich für die Meldepflicht gemäß Gesetz Nr. 326/1999 Sb. verarbeitet und nach dem Aufenthalt sicher gelöscht.',
@@ -769,9 +788,13 @@
         }
     };
 
+    let currentLang = 'cs';
+    const blankSvg = (label) => `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='120' viewBox='0 0 220 120'%3E%3Crect width='220' height='120' fill='%23e6ddd0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2396634a' font-size='11' font-family='sans-serif'%3E${label}%3C/text%3E%3C/svg%3E`;
+
     function setLang(lang) {
         const t = T[lang];
         if (!t) return;
+        currentLang = lang;
         $('heroTitle').innerHTML        = t.heroTitle;
         $('heroSub').innerHTML          = t.heroSub;
         $('cardTitle1').innerHTML       = t.cardTitle1;
@@ -780,7 +803,8 @@
         $('formDesc').innerHTML         = t.formDesc;
         $('labelName').innerHTML        = t.labelName;
         $('labelBirth').innerHTML       = t.labelBirth;
-        $('labelIdNum').innerHTML       = t.labelIdNum;
+        $('labelStayFrom').innerHTML    = t.labelStayFrom;
+        $('labelStayTo').innerHTML      = t.labelStayTo;
         $('labelEmail').innerHTML       = t.labelEmail;
         $('labelPhone').innerHTML       = t.labelPhone;
         $('labelApartment').innerHTML   = t.labelApartment;
@@ -792,6 +816,9 @@
         $('labelDamage').innerHTML      = t.labelDamage;
         $('gdprNoteText').innerHTML     = t.gdprNote;
         $('submitBtn').innerHTML        = t.btnSubmit;
+        // Update SVG placeholders only if no photo has been uploaded yet
+        if (!frontFile) $('frontPreview').src = blankSvg(t.svgFront);
+        if (!backFile)  $('backPreview').src  = blankSvg(t.svgBack);
         document.querySelectorAll('.lang-btn').forEach(b => {
             b.classList.toggle('active', b.dataset.lang === lang);
         });
