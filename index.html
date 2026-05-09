@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4U Olomouc — Luxusní apartmány</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0e9de; --bg-mid:#e6ddd0; --bg-dark:#d9cfc0;
+  --brown:#4a2e1e; --brown-mid:#6b4232; --brown-light:#96634a;
+  --accent:#c4956a; --accent-light:#dab48a;
+  --cream:#faf6f0; --white:#ffffff;
+  --text:#291a10; --text-mid:#5a3826; --text-muted:rgba(42,26,16,0.48);
+  --shadow:rgba(74,46,30,0.12);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* GRAIN */
+body::before{
+  content:'';position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px;
+}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.22,.68,0,1.1),transform .75s cubic-bezier(.22,.68,0,1.1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-36px);transition:opacity .8s ease,transform .8s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(36px);transition:opacity .8s ease,transform .8s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 56px;
+  background:rgba(240,233,222,.92);backdrop-filter:blur(20px) saturate(1.4);
+  border-bottom:1px solid rgba(74,46,30,.1);
+  transition:padding .35s,box-shadow .35s;
+}
+nav.scrolled{padding:13px 56px;box-shadow:0 4px 32px var(--shadow);}
+.logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
+.logo-icon{
+  width:46px;height:46px;background:var(--brown);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;letter-spacing:-1px;
+  color:var(--accent-light);box-shadow:0 6px 24px rgba(74,46,30,.3);
+  transition:transform .3s;
+}
+.logo:hover .logo-icon{transform:rotate(-4deg) scale(1.06);}
+.logo-text strong{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:2.5px;color:var(--brown);}
+.logo-text span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);}
+.nav-links{display:flex;gap:30px;list-style:none;align-items:center;}
+.nav-links li{display:flex;align-items:center;}
+.nav-links a{
+  color:var(--text-mid);text-decoration:none;font-size:11.5px;letter-spacing:2px;
+  text-transform:uppercase;font-weight:500;position:relative;padding-bottom:2px;transition:color .2s;
+}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--brown);transition:width .3s;}
+.nav-links a:hover{color:var(--brown);}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{
+  background:var(--brown)!important;color:var(--cream)!important;
+  padding:0 22px!important;height:40px;border-radius:4px;font-weight:600!important;letter-spacing:1.5px;
+  box-shadow:0 4px 16px rgba(74,46,30,.28);
+  transition:background .2s,transform .2s,box-shadow .2s!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  line-height:1!important;padding-bottom:0!important;
+}
+.nav-cta::after{display:none!important;}
+.nav-cta:hover{background:var(--brown-mid)!important;transform:translateY(-1px);box-shadow:0 8px 24px rgba(74,46,30,.36)!important;}
+.nav-reserve{background:transparent!important;color:var(--brown)!important;border:1.5px solid rgba(74,46,30,.35)!important;box-shadow:none!important;}
+.nav-reserve:hover{background:rgba(74,46,30,.06)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:1.5px;background:var(--brown);display:block;transition:.3s;}
+
+/* HERO */
+#hero{height:100vh;min-height:640px;position:relative;overflow:hidden;display:flex;align-items:center;}
+.hero-slides{position:absolute;inset:0;}
+.hero-slide{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;transition:opacity 1.6s cubic-bezier(.4,0,.2,1),transform 9s ease;
+  transform:scale(1.06);
+}
+.hero-slide.active{opacity:1;transform:scale(1);}
+.hero-slide:nth-child(1){background-image:url('img/apartman01/1.jpg');}
+.hero-slide:nth-child(2){background-image:url('img/apartman02/1.jpg');}
+.hero-slide:nth-child(3){background-image:url('img/apartman03/4.jpg');}
+.hero-slide:nth-child(4){background-image:url('img/apartman03/2.jpg');}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(22,8,2,.65) 0%,rgba(22,8,2,.3) 55%,rgba(22,8,2,.15) 100%),
+             linear-gradient(to top,rgba(22,8,2,.72) 0%,transparent 52%);
+}
+.hero-line{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent-light),transparent);z-index:2;}
+
+.hero-content{position:relative;z-index:3;padding:0 56px;max-width:680px;}
+@media(min-width:901px){.hero-content{margin-left:7vw;}}
+
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--accent-light);margin-bottom:28px;
+  opacity:0;animation:hFade .9s .35s ease forwards;
+}
+.hero-kicker::before{content:'';width:28px;height:1px;background:var(--accent-light);}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(60px,9.5vw,116px);font-weight:300;line-height:.88;letter-spacing:-3px;color:#fff;
+  opacity:0;animation:hFade .9s .55s ease forwards;
+}
+.hero-title em{font-style:italic;color:var(--accent-light);}
+.hero-title strong{display:block;font-weight:600;}
+.hero-sub{
+  margin-top:18px;font-family:'Barlow Condensed',sans-serif;
+  font-size:12.5px;letter-spacing:3.5px;text-transform:uppercase;color:rgba(255,255,255,.58);
+  opacity:0;animation:hFade .9s .7s ease forwards;
+}
+.hero-sub b{color:var(--accent-light);font-weight:400;}
+.hero-actions{
+  display:flex;gap:14px;flex-wrap:wrap;margin-top:44px;
+  opacity:0;animation:hFade .9s .88s ease forwards;
+}
+
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--brown);color:var(--cream);padding:16px 34px;border-radius:4px;
+  font-weight:500;font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;box-shadow:0 8px 32px rgba(74,46,30,.38);
+  transition:background .25s,transform .25s,box-shadow .25s;position:relative;overflow:hidden;
+}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.09) 0%,transparent 60%);opacity:0;transition:opacity .25s;}
+.btn-primary:hover{background:var(--brown-mid);transform:translateY(-2px);box-shadow:0 14px 40px rgba(74,46,30,.5);}
+.btn-primary:hover::after{opacity:1;}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid rgba(255,255,255,.45);color:#fff;padding:16px 34px;border-radius:4px;
+  font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;
+  transition:border-color .25s,color .25s,background .25s;
+}
+.btn-ghost:hover{border-color:var(--accent-light);color:var(--accent-light);background:rgba(255,255,255,.04);}
+
+.hero-ui{position:absolute;bottom:40px;right:56px;z-index:3;display:flex;flex-direction:column;align-items:flex-end;gap:14px;}
+.hero-counter{font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.45);letter-spacing:2px;}
+.hero-counter b{color:var(--accent-light);font-weight:400;}
+.hero-dots{display:flex;gap:6px;}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:all .35s;}
+.hero-dot.active{background:var(--accent-light);width:22px;border-radius:3px;}
+.hero-scroll{
+  position:absolute;bottom:40px;left:56px;z-index:3;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.hero-scroll-line{
+  width:1px;height:56px;
+  background:linear-gradient(to bottom,transparent,var(--accent-light));
+  animation:sPulse 2.2s ease-in-out infinite;
+}
+.hero-scroll-dot{
+  width:4px;height:4px;border-radius:50%;background:var(--accent-light);
+  animation:sPulse 2.2s ease-in-out infinite .4s;
+}
+@keyframes hFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sPulse{0%,100%{opacity:.25}50%{opacity:.9}}
+
+/* CUSTOM CURSOR */
+*{cursor:none!important;}
+#cursor{
+  position:fixed;z-index:9999;pointer-events:none;
+  top:0;left:0;
+  mix-blend-mode:multiply;
+}
+#cursor-ring{
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid var(--brown);
+  position:absolute;top:-18px;left:-18px;
+  transition:width .3s ease,height .3s ease,border-color .3s ease,background .3s ease,top .3s ease,left .3s ease,opacity .25s;
+  opacity:.7;
+}
+#cursor-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);
+  position:absolute;top:-2.5px;left:-2.5px;
+  transition:width .15s,height .15s,top .15s,left .15s,background .2s;
+}
+body.cursor-hover #cursor-ring{
+  width:56px;height:56px;top:-28px;left:-28px;
+  border-color:var(--accent);background:rgba(196,149,106,.08);
+  opacity:1;
+}
+body.cursor-hover #cursor-dot{
+  width:3px;height:3px;top:-1.5px;left:-1.5px;background:var(--brown);
+}
+body.cursor-click #cursor-ring{
+  width:28px;height:28px;top:-14px;left:-14px;
+  background:rgba(196,149,106,.18);
+}
+
+/* STATS */
+.stats-bar{background:var(--brown);overflow:hidden;}
+.stats-inner{max-width:1200px;margin:0 auto;padding:0 56px;display:flex;align-items:stretch;}
+.stat{flex:1;padding:30px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.08);transition:background .3s;}
+.stat:last-child{border-right:none;}
+.stat:hover{background:rgba(255,255,255,.04);}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--accent-light);line-height:1;display:block;}
+.stat-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.42);margin-top:6px;display:block;}
+
+/* SECTIONS */
+section{padding:100px 0;}
+.container{max-width:1200px;margin:0 auto;padding:0 56px;}
+.section-eyebrow{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:12px;margin-bottom:14px;
+}
+.section-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent);}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:300;line-height:1.05;color:var(--brown);}
+.section-title em{font-style:italic;color:var(--brown-light);}
+.section-rule{width:48px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);margin:22px 0 44px;}
+
+/* APARTMENTS */
+#apartmany{background:var(--cream);}
+.apt-tabs{display:flex;margin-bottom:52px;border-bottom:1px solid var(--bg-dark);}
+.apt-tab{
+  padding:16px 28px;cursor:pointer;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:500;
+  color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;white-space:nowrap;
+}
+.apt-tab.active{color:var(--brown);border-bottom-color:var(--brown);}
+.apt-tab:hover{color:var(--brown-mid);}
+.apt-tab-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--bg-dark);margin-right:8px;transition:background .2s;vertical-align:middle;}
+.apt-tab.active .apt-tab-dot{background:var(--accent);}
+.apt-panel{display:none;}
+.apt-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;}
+
+.gallery{
+  position:relative;border-radius:8px;overflow:hidden;aspect-ratio:4/3;background:var(--bg-mid);
+  box-shadow:0 16px 56px rgba(74,46,30,.16);
+}
+.gallery::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(22,8,2,.38) 0%,transparent 50%);pointer-events:none;}
+.gallery img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s,transform .7s;transform:scale(1.03);}
+.gallery img.active{opacity:1;transform:scale(1);}
+.gallery-controls{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:3;}
+.gallery-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:all .25s;}
+.gallery-dot.active{background:var(--accent-light);width:18px;border-radius:3px;}
+.gallery-btn{
+  position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;z-index:3;
+  background:rgba(250,246,240,.85);border:none;color:var(--brown);font-size:19px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:background .2s,transform .2s;backdrop-filter:blur(8px);
+}
+.gallery-btn:hover{background:var(--cream);transform:translateY(-50%) scale(1.1);}
+.gallery-prev{left:14px;}.gallery-next{right:14px;}
+.gallery-count{position:absolute;top:14px;right:14px;z-index:3;background:rgba(22,8,2,.52);color:rgba(255,255,255,.85);font-size:11px;letter-spacing:1.5px;padding:5px 10px;border-radius:20px;backdrop-filter:blur(8px);}
+
+.apt-kicker{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.apt-kicker::before{content:'';width:16px;height:1px;background:var(--accent);}
+.apt-name{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--brown);margin-bottom:6px;}
+.apt-sub{font-size:14px;color:var(--text-muted);margin-bottom:24px;font-style:italic;}
+.apt-desc{font-size:15px;line-height:1.85;color:var(--text-mid);margin-bottom:28px;border-left:2px solid var(--bg-dark);padding-left:16px;}
+.apt-specs{display:flex;margin-bottom:28px;background:var(--bg);border-radius:6px;overflow:hidden;border:1px solid var(--bg-dark);}
+.apt-spec{flex:1;padding:14px 10px;text-align:center;border-right:1px solid var(--bg-dark);font-size:11.5px;color:var(--text-mid);}
+.apt-spec:last-child{border-right:none;}
+.apt-spec-val{display:block;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--brown);line-height:1;margin-bottom:4px;}
+.amenities{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px;}
+.amenity{padding:5px 13px;border-radius:100px;border:1px solid var(--bg-dark);font-size:11.5px;color:var(--text-mid);background:var(--bg);transition:border-color .2s,color .2s,background .2s;}
+.amenity:hover{border-color:var(--accent);color:var(--brown);background:rgba(196,149,106,.07);}
+.price-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.price-table thead tr{border-bottom:1px solid var(--bg-dark);}
+.price-table th{text-align:left;padding:10px 14px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);font-weight:500;}
+.price-table td{padding:13px 14px;font-size:14px;color:var(--text);border-bottom:1px solid rgba(217,207,192,.5);}
+.price-table td:last-child{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;color:var(--brown);}
+.price-table tr:hover td{background:rgba(196,149,106,.05);}
+.apt-notes{font-size:12.5px;color:var(--text-muted);line-height:1.75;margin-bottom:28px;padding:14px 16px;background:var(--bg);border-radius:6px;border:1px solid var(--bg-dark);}
+
+.checkin-bar{
+  background:var(--brown);color:var(--cream);border-radius:8px;padding:28px 36px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-top:52px;
+  box-shadow:0 8px 40px rgba(74,46,30,.22);
+}
+.checkin-info{display:flex;gap:36px;flex-wrap:wrap;}
+.checkin-item label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.42);display:block;margin-bottom:4px;}
+.checkin-item span{font-size:16px;color:var(--accent-light);}
+.btn-checkin{
+  background:var(--accent);color:var(--brown);padding:14px 28px;border-radius:4px;
+  font-weight:600;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;
+  box-shadow:0 4px 20px rgba(196,149,106,.4);transition:background .2s,transform .2s;
+}
+.btn-checkin:hover{background:var(--accent-light);transform:translateY(-2px);}
+
+/* FEATURES */
+#vyhody{background:var(--bg-mid);}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--bg-dark);border-radius:10px;overflow:hidden;margin-top:48px;box-shadow:0 8px 40px var(--shadow);}
+.feature{background:var(--cream);padding:44px 36px;transition:background .3s;position:relative;overflow:hidden;}
+.feature::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--accent);transition:height .4s ease;}
+.feature:hover::before{height:100%;}
+.feature:hover{background:rgba(240,233,222,.6);}
+.feature-icon{font-size:32px;margin-bottom:20px;display:block;transition:transform .3s;}
+.feature:hover .feature-icon{transform:scale(1.15);}
+.feature-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--brown);margin-bottom:10px;}
+.feature-text{font-size:14px;line-height:1.75;color:var(--text-mid);}
+
+/* REVIEWS */
+#recenze{background:var(--bg);}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;}
+.review{background:var(--cream);padding:36px;border-radius:8px;border:1px solid var(--bg-dark);position:relative;overflow:hidden;transition:transform .35s,box-shadow .35s;}
+.review-stripe{position:absolute;top:0;left:0;right:0;height:3px;}
+.review:nth-child(1) .review-stripe{background:var(--brown);}
+.review:nth-child(2) .review-stripe{background:var(--accent);}
+.review:nth-child(3) .review-stripe{background:var(--brown-light);}
+.review:hover{transform:translateY(-6px);box-shadow:0 20px 48px var(--shadow);}
+.review-quote{font-family:'Cormorant Garamond',serif;font-size:64px;line-height:.7;color:var(--accent);opacity:.2;margin-bottom:12px;display:block;}
+.review-stars{color:var(--accent);font-size:13px;margin-bottom:18px;letter-spacing:3px;}
+.review-text{font-size:14.5px;line-height:1.85;color:var(--text-mid);margin-bottom:24px;font-style:italic;}
+.review-rule{width:28px;height:1px;background:var(--bg-dark);margin-bottom:14px;}
+.review-author{font-size:11.5px;letter-spacing:2px;text-transform:uppercase;color:var(--brown-light);font-weight:500;}
+.review-date{font-size:11px;color:var(--text-muted);margin-top:3px;}
+
+/* CONTACT */
+#kontakt{background:var(--bg-mid);}
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:72px;margin-top:52px;align-items:start;}
+.contact-items{display:flex;flex-direction:column;gap:6px;}
+.contact-card{
+  display:flex;align-items:flex-start;gap:18px;padding:20px;border-radius:8px;
+  background:var(--cream);border:1px solid var(--bg-dark);
+  transition:border-color .2s,transform .2s,box-shadow .2s;
+}
+.contact-card:hover{border-color:var(--accent);transform:translateX(4px);box-shadow:0 4px 20px var(--shadow);}
+.contact-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;background:var(--bg);border:1px solid var(--bg-dark);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.contact-detail h4{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;font-weight:500;}
+.contact-detail a,.contact-detail p{font-size:16px;color:var(--text);text-decoration:none;}
+.contact-detail a:hover{color:var(--brown);}
+.contact-form-wrap{background:var(--cream);border-radius:10px;padding:40px;border:1px solid var(--bg-dark);box-shadow:0 8px 40px var(--shadow);}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--brown);margin-bottom:6px;}
+.form-sub{font-size:13.5px;color:var(--text-muted);margin-bottom:28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:14px;}
+.form-group label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:7px;font-weight:500;}
+.form-group input,.form-group textarea,.form-group select{
+  width:100%;background:var(--bg);border:1.5px solid var(--bg-dark);border-radius:6px;padding:13px 15px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s,box-shadow .2s;outline:none;appearance:none;
+}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--brown);box-shadow:0 0 0 3px rgba(74,46,30,.08);}
+.form-group textarea{resize:vertical;min-height:96px;}
+.form-submit{
+  width:100%;padding:16px;background:var(--brown);color:var(--cream);border:none;border-radius:6px;
+  font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+  transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 6px 24px rgba(74,46,30,.25);
+}
+.form-submit:hover{background:var(--brown-mid);transform:translateY(-1px);box-shadow:0 10px 32px rgba(74,46,30,.35);}
+.form-success{display:none;padding:14px 16px;border-radius:6px;background:rgba(74,46,30,.07);border:1px solid rgba(74,46,30,.18);color:var(--brown);font-size:13.5px;text-align:center;margin-top:12px;}
+.btn-whatsapp{
+  display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;padding:14px;border-radius:6px;
+  background:rgba(37,211,102,.09);border:1.5px solid rgba(37,211,102,.28);color:#1a9e4a;
+  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;text-decoration:none;
+  transition:background .2s,transform .2s;
+}
+.btn-whatsapp:hover{background:rgba(37,211,102,.17);transform:translateY(-1px);}
+
+/* FOOTER */
+footer{background:var(--brown);padding:64px 0 0;position:relative;overflow:hidden;}
+footer::before{
+  content:'4U';position:absolute;right:-20px;bottom:-60px;
+  font-family:'Cormorant Garamond',serif;font-size:260px;font-weight:600;
+  color:rgba(255,255,255,.03);line-height:1;pointer-events:none;user-select:none;
+}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 56px 56px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:56px;}
+.footer-logo{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.footer-logo .logo-icon{background:rgba(255,255,255,.1);color:var(--accent-light);box-shadow:none;}
+.footer-logo .logo-text strong{color:var(--accent-light);}
+.footer-logo .logo-text span{color:rgba(255,255,255,.35);}
+.footer-desc{font-size:13.5px;line-height:1.85;color:rgba(255,255,255,.48);max-width:300px;}
+.footer-social{display:flex;gap:10px;margin-top:22px;}
+.footer-soc{width:38px;height:38px;border-radius:8px;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;color:rgba(255,255,255,.48);transition:border-color .2s,color .2s,background .2s;}
+.footer-soc:hover{border-color:var(--accent-light);color:var(--accent-light);background:rgba(255,255,255,.05);}
+.footer-col h5{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent-light);margin-bottom:22px;font-weight:600;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-col a{font-size:13.5px;color:rgba(255,255,255,.46);text-decoration:none;transition:color .2s;}
+.footer-col a:hover{color:var(--cream);}
+.footer-bottom{max-width:1200px;margin:0 auto;padding:20px 56px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:rgba(255,255,255,.28);flex-wrap:wrap;gap:8px;}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:2000;background:rgba(18,6,1,.96);display:none;align-items:center;justify-content:center;}
+.lightbox.open{display:flex;}
+.lightbox-img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px;}
+.lightbox-close{position:absolute;top:24px;right:28px;font-size:28px;color:rgba(255,255,255,.6);cursor:pointer;transition:color .2s;}
+.lightbox-close:hover{color:#fff;}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.lightbox-nav:hover{background:rgba(196,149,106,.25);}
+.lightbox-prev{left:20px;}.lightbox-next{right:20px;}
+
+/* FLOATING WA */
+.float-wa{
+  position:fixed;bottom:28px;right:28px;z-index:400;width:56px;height:56px;border-radius:50%;
+  background:#25d366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;
+  box-shadow:0 8px 32px rgba(37,211,102,.45);
+  transition:transform .3s,box-shadow .3s;animation:waPulse 3s infinite;
+}
+.float-wa:hover{transform:scale(1.12);box-shadow:0 12px 40px rgba(37,211,102,.6);animation:none;}
+@keyframes waPulse{0%,100%{box-shadow:0 8px 32px rgba(37,211,102,.45)}50%{box-shadow:0 8px 48px rgba(37,211,102,.7)}}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:15px 24px;}
+  nav.scrolled{padding:11px 24px;}
+  .nav-links{display:none;}
+  .nav-links.open{display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:var(--cream);padding:28px 24px;gap:22px;border-bottom:1px solid var(--bg-dark);box-shadow:0 16px 40px var(--shadow);}
+  .hamburger{display:flex;}
+  .container{padding:0 24px;}
+  .hero-content{padding:0 24px;margin-left:0;}
+  .hero-ui{right:24px;}
+  .hero-scroll{left:24px;}
+  .stats-inner{flex-wrap:wrap;}
+  .stat{min-width:45%;}
+  .apt-panel.active{grid-template-columns:1fr;}
+  .apt-tabs{overflow-x:auto;scrollbar-width:none;}
+  .apt-tabs::-webkit-scrollbar{display:none;}
+  .features-grid{grid-template-columns:1fr;}
+  .reviews-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;gap:32px;}
+  .footer-inner{grid-template-columns:1fr;gap:36px;padding-bottom:36px;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .hero-actions{flex-direction:column;}
+  .checkin-bar{flex-direction:column;}
+  .form-row{grid-template-columns:1fr;}
+  footer::before{display:none;}
+}
+
+/* ── LANG SWITCH ── */
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:600;
+  display:flex;justify-content:flex-end;align-items:center;
+  padding:6px 56px;
+  background:rgba(240,233,222,.97);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(74,46,30,.1);
+  gap:6px;
+}
+.lang-bar + nav { top: 36px; }
+.lb{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 12px;border-radius:30px;
+  font-size:11px;letter-spacing:1px;font-weight:600;
+  border:1px solid rgba(74,46,30,.18);
+  color:var(--text-mid);background:transparent;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:all .2s;
+}
+.lb.active{background:var(--brown);color:var(--cream);border-color:var(--brown);}
+.lb:hover:not(.active){border-color:var(--accent);color:var(--brown);}
+.lb .flag{font-size:14px;}
+@media(max-width:900px){.lang-bar{padding:5px 16px;} nav{top:34px;}}
+</style>
+</head>
+<body>
+
+<a href="https://wa.me/420728948738" target="_blank" class="float-wa" title="WhatsApp">💬</a>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor">
+  <div id="cursor-ring"></div>
+  <div id="cursor-dot"></div>
+</div>
+
+<!-- NAV -->
+<div class="lang-bar" id="langBar">
+  <button class="lb active" data-lang="cs" onclick="setLang('cs')"><span class="flag">🇨🇿</span> CZ</button>
+  <button class="lb" data-lang="en" onclick="setLang('en')"><span class="flag">🇬🇧</span> EN</button>
+  <button class="lb" data-lang="de" onclick="setLang('de')"><span class="flag">🇩🇪</span> DE</button>
+</div>
+<nav id="navbar">
+  <a href="#" class="logo">
+    <div class="logo-icon">4U</div>
+    <div class="logo-text">
+      <strong>4U Olomouc</strong>
+      <span>Luxusní Apartmány</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#apartmany" data-key="nav_apts">Apartmány</a></li>
+    <li><a href="#vyhody" data-key="nav_why">Výhody</a></li>
+    <li><a href="#recenze" data-key="nav_reviews">Recenze</a></li>
+    <li><a href="#kontakt" data-key="nav_contact">Kontakt</a></li>
+    <li><a href="https://www.apartman4uolomouc.cz/checkinolomouc.html" target="_blank" class="nav-cta" data-key="nav_checkin">Check In</a></li>
+    <li><a href="tel:+420728948738" class="nav-cta nav-reserve" data-key="nav_reserve">Rezervovat</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active"></div>
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <div class="hero-kicker" data-key="hero_kicker">Olomouc · Luxusní krátkodobé ubytování</div>
+    <h1 class="hero-title"><em>4U</em><strong>Olomouc</strong></h1>
+    <p class="hero-sub" data-key="hero_sub">Parkování zdarma &nbsp;·&nbsp; <b>WiFi</b> &nbsp;·&nbsp; Centrum do 7 minut</p>
+    <div class="hero-actions">
+      <a href="#apartmany" class="btn-primary" data-key="hero_btn1">Prohlédnout apartmány</a>
+      <a href="tel:+420728948738" class="btn-ghost" data-key="hero_btn2">+420 728 948 738</a>
+    </div>
+  </div>
+  <div class="hero-ui">
+    <div class="hero-counter"><b id="hCurr">01</b> / <span id="hTotal">04</span></div>
+    <div class="hero-dots" id="heroDots"></div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <div class="hero-scroll-dot"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stats-inner">
+    <div class="stat"><span class="stat-num">3</span><span class="stat-label">Apartmány</span></div>
+    <div class="stat"><span class="stat-num">7'</span><span class="stat-label">Do centra pěšky</span></div>
+    <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Parkování</span></div>
+    <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Podpora hostů</span></div>
+    <div class="stat"><span class="stat-num">★ 9.4</span><span class="stat-label">Hodnocení hostů</span></div>
+  </div>
+</div>
+
+<!-- APARTMÁNY -->
+<section id="apartmany">
+  <div class="container">
+    <div class="section-eyebrow reveal" data-key="apts_eye">Naše nabídka</div>
+    <h2 class="section-title reveal d1" data-key="apts_title">Vyberte si <em>apartmán</em></h2>
+    <div class="section-rule reveal d2"></div>
+    <div class="apt-tabs reveal d2">
+      <div class="apt-tab active" onclick="switchApt(0)"><span class="apt-tab-dot"></span>Apartmán 1 · Litovelská 2b</div>
+      <div class="apt-tab" onclick="switchApt(1)"><span class="apt-tab-dot"></span>Apartmán 2 · Litovelská 2b</div>
+      <div class="apt-tab" onclick="switchApt(2)"><span class="apt-tab-dot"></span>Apartmán 3 · Letců 29</div>
+    </div>
+
+    <!-- APT 1 -->
+    <div class="apt-panel active" id="apt0">
+      <div class="reveal-left">
+        <div class="gallery" id="gallery0">
+          <img src="img/apartman01/1.jpg" class="active" alt="">
+          <img src="img/apartman01/2.jpg" alt="">
+          <img src="img/apartman01/3.jpg" alt="">
+          <img src="img/apartman01/4.jpg" alt="">
+          <img src="img/apartman01/5.jpg" alt="">
+          <img src="img/apartman01/6.jpg" alt="">
+          <img src="img/apartman01/7.jpg" alt="">
+          <img src="img/apartman01/8.jpg" alt="">
+          <img src="img/apartman01/9.jpg" alt="">
+          <img src="img/apartman01/10.jpg" alt="">
+          <button class="gallery-btn gallery-prev" onclick="galleryMove(0,-1)">‹</button>
+          <button class="gallery-btn gallery-next" onclick="galleryMove(0,1)">›</button>
+          <div class="gallery-controls" id="dots0"></div>
+          <div class="gallery-count" id="cnt0">1 / 10</div>
+        </div>
+      </div>
+      <div class="apt-detail reveal-right">
+        <div class="apt-kicker">Litovelská 2b · Novostavba s výtahem</div>
+        <h3 class="apt-name">Apartmán 1</h3>
+        <p class="apt-sub">Čtyřlůžkový studiový apartmán · 40 m²</p>
+        <p class="apt-desc">Studiový apartmán v novostavbě v bezprostřední blízkosti centra Olomouce. Pěšky do centra za 7 minut, tramvají za 2 minuty. K výstavišti Flora 9 minut, park s hřištěm 2 minuty. Soukromé zastřešené parkoviště zdarma.</p>
+        <div class="apt-specs">
+          <div class="apt-spec"><span class="apt-spec-val">40m²</span>Plocha</div>
+          <div class="apt-spec"><span class="apt-spec-val">4</span>Osoby</div>
+          <div class="apt-spec"><span class="apt-spec-val">Free</span>Parking</div>
+          <div class="apt-spec"><span class="apt-spec-val">🏠</span>Balkon</div>
+        </div>
+        <div class="amenities">
+          <span class="amenity">WiFi</span><span class="amenity">Kuchyňka</span>
+          <span class="amenity">Mikrovlnná trouba</span><span class="amenity">Chladnička</span>
+          <span class="amenity">Televize</span><span class="amenity">Sprchový kout</span>
+          <span class="amenity">Pračka</span><span class="amenity">Sušička</span>
+          <span class="amenity">Balkon</span><span class="amenity">Dětská postýlka zdarma</span>
+        </div>
+        <table class="price-table">
+          <thead><tr><th>Počet osob</th><th>Cena za noc (do 31.5.2026)</th></tr></thead>
+          <tbody>
+            <tr><td>4 osoby</td><td>2 390 Kč</td></tr>
+            <tr><td>3 osoby</td><td>1 990 Kč</td></tr>
+            <tr><td>2 osoby</td><td>1 590 Kč</td></tr>
+            <tr><td>1 osoba</td><td>1 550 Kč</td></tr>
+          </tbody>
+        </table>
+        <div class="apt-notes">
+          Přistýlka 5. osoby: 490 Kč/noc · Sleva 5 % při 5+ nocích<br>
+          Check-in: 14:30–21:00 · Check-out: do 10:00 (do 13:00 za 300 Kč) · Storno do 3 dnů.
+        </div>
+        <a href="tel:+420728948738" class="btn-primary">Rezervovat &nbsp; +420 728 948 738</a>
+      </div>
+    </div>
+
+    <!-- APT 2 -->
+    <div class="apt-panel" id="apt1">
+      <div class="reveal-left">
+        <div class="gallery" id="gallery1">
+          <img src="img/apartman02/1.jpg" class="active" alt="">
+          <img src="img/apartman02/2.jpg" alt="">
+          <img src="img/apartman02/3.jpg" alt="">
+          <img src="img/apartman02/4.jpg" alt="">
+          <img src="img/apartman02/5.jpg" alt="">
+          <img src="img/apartman02/6.jpg" alt="">
+          <img src="img/apartman02/7.jpg" alt="">
+          <button class="gallery-btn gallery-prev" onclick="galleryMove(1,-1)">‹</button>
+          <button class="gallery-btn gallery-next" onclick="galleryMove(1,1)">›</button>
+          <div class="gallery-controls" id="dots1"></div>
+          <div class="gallery-count" id="cnt1">1 / 7</div>
+        </div>
+      </div>
+      <div class="apt-detail reveal-right">
+        <div class="apt-kicker">Litovelská 2b · Novostavba s výtahem</div>
+        <h3 class="apt-name">Apartmán 2</h3>
+        <p class="apt-sub">Tříosobový studiový apartmán · 34 m²</p>
+        <p class="apt-desc">Studiový apartmán v novostavbě vybavené výtahem a bezbariérovými vstupy. Pěšky do centra 7 minut, tramvají 2 minuty. K vlakového nádraží 11 minut tramvají. Park s dětským hřištěm 2 minuty. Soukromé parkovací stání zdarma.</p>
+        <div class="apt-specs">
+          <div class="apt-spec"><span class="apt-spec-val">34m²</span>Plocha</div>
+          <div class="apt-spec"><span class="apt-spec-val">3</span>Osoby</div>
+          <div class="apt-spec"><span class="apt-spec-val">Free</span>Parking</div>
+          <div class="apt-spec"><span class="apt-spec-val">🛗</span>Výtah</div>
+        </div>
+        <div class="amenities">
+          <span class="amenity">WiFi</span><span class="amenity">Kuchyňka</span>
+          <span class="amenity">Mikrovlnná trouba</span><span class="amenity">Chladnička</span>
+          <span class="amenity">Televize</span><span class="amenity">Sprchový kout</span>
+          <span class="amenity">Výtah</span><span class="amenity">Bezbariérový vstup</span>
+        </div>
+        <table class="price-table">
+          <thead><tr><th>Počet osob</th><th>Cena za noc (2026)</th></tr></thead>
+          <tbody>
+            <tr><td>3 osoby</td><td>1 890 Kč</td></tr>
+            <tr><td>2 osoby</td><td>1 590 Kč</td></tr>
+            <tr><td>1 osoba</td><td>1 550 Kč</td></tr>
+          </tbody>
+        </table>
+        <div class="apt-notes">
+          Dítě do 3 let zdarma · Přistýlka 490 Kč (na dotaz)<br>
+          Check-in: 14:00–21:00 · Check-out: do 10:00 (do 13:00 za 300 Kč)
+        </div>
+        <a href="tel:+420728948738" class="btn-primary">Rezervovat &nbsp; +420 728 948 738</a>
+      </div>
+    </div>
+
+    <!-- APT 3 -->
+    <div class="apt-panel" id="apt2">
+      <div class="reveal-left">
+        <div class="gallery" id="gallery2">
+          <img src="img/apartman03/1.jpg" class="active" alt="">
+          <img src="img/apartman03/2.jpg" alt="">
+          <img src="img/apartman03/3.jpg" alt="">
+          <img src="img/apartman03/4.jpg" alt="">
+          <img src="img/apartman03/5.jpg" alt="">
+          <img src="img/apartman03/6.jpg" alt="">
+          <img src="img/apartman03/7.jpg" alt="">
+          <img src="img/apartman03/8.jpg" alt="">
+          <img src="img/apartman03/9.jpg" alt="">
+          <img src="img/apartman03/10.jpg" alt="">
+          <img src="img/apartman03/11.jpg" alt="">
+          <button class="gallery-btn gallery-prev" onclick="galleryMove(2,-1)">‹</button>
+          <button class="gallery-btn gallery-next" onclick="galleryMove(2,1)">›</button>
+          <div class="gallery-controls" id="dots2"></div>
+          <div class="gallery-count" id="cnt2">1 / 11</div>
+        </div>
+      </div>
+      <div class="apt-detail reveal-right">
+        <div class="apt-kicker">Letců 29, Olomouc · Přízemí</div>
+        <h3 class="apt-name">Apartmán 3</h3>
+        <p class="apt-sub">Dvoulůžkový studiový apartmán · 24 m²</p>
+        <p class="apt-desc">Útulný studiový apartmán 30 sekund od tramvajové a autobusové zastávky, 1 minutu od Fakulty tělesné kultury UP a centra Baluo. Do centra tramvají 8 minut. Parkování přímo u domu. Domácí mazlíčci po domluvě.</p>
+        <div class="apt-specs">
+          <div class="apt-spec"><span class="apt-spec-val">24m²</span>Plocha</div>
+          <div class="apt-spec"><span class="apt-spec-val">2</span>Osoby</div>
+          <div class="apt-spec"><span class="apt-spec-val">🚗</span>Parking</div>
+          <div class="apt-spec"><span class="apt-spec-val">🐾</span>Mazlíčci</div>
+        </div>
+        <div class="amenities">
+          <span class="amenity">WiFi</span><span class="amenity">Kuchyňka</span>
+          <span class="amenity">Indukční vařič</span><span class="amenity">Mikrovlnná trouba</span>
+          <span class="amenity">Chladnička</span><span class="amenity">Pračka</span>
+          <span class="amenity">Sušička</span><span class="amenity">Žehlička</span>
+          <span class="amenity">Fén</span><span class="amenity">Zvířata po domluvě</span>
+        </div>
+        <table class="price-table">
+          <thead><tr><th>Počet osob</th><th>Cena za noc (do 31.5.2026)</th></tr></thead>
+          <tbody>
+            <tr><td>2 osoby</td><td>1 490 Kč</td></tr>
+            <tr><td>1 osoba</td><td>1 390 Kč</td></tr>
+          </tbody>
+        </table>
+        <div class="apt-notes">
+          Min. 2 noci · Sleva 5 % při 4+ nocích · Mazlíček 280 Kč/pobyt<br>
+          Check-in: 14:00–21:00 · Check-out: do 10:00 (do 13:00 za 200 Kč) · Dítě do 3 let zdarma.
+        </div>
+        <a href="tel:+420728948738" class="btn-primary">Rezervovat &nbsp; +420 728 948 738</a>
+      </div>
+    </div>
+
+    <div class="checkin-bar reveal">
+      <div class="checkin-info">
+        <div class="checkin-item"><label>Check-in</label><span>od 14:00</span></div>
+        <div class="checkin-item"><label>Check-out</label><span>do 10:00</span></div>
+        <div class="checkin-item"><label>Parkování</label><span>Zdarma</span></div>
+        <div class="checkin-item"><label>WiFi</label><span>Zdarma</span></div>
+      </div>
+      <a href="https://www.apartman4uolomouc.cz/checkinolomouc.html" target="_blank" class="btn-checkin" data-key="checkin_btn">Online Check-In →</a>
+    </div>
+  </div>
+</section>
+
+<!-- VÝHODY -->
+<section id="vyhody">
+  <div class="container">
+    <div class="section-eyebrow reveal" data-key="why_eye">Proč 4U Olomouc</div>
+    <h2 class="section-title reveal d1" data-key="why_title">Vše, co <em>potřebujete</em></h2>
+    <div class="section-rule reveal d2"></div>
+    <div class="features-grid">
+      <div class="feature reveal d1"><span class="feature-icon">🚗</span><div class="feature-title">Parkování zdarma</div><p class="feature-text">Soukromé zastřešené parkovací stání přímo u apartmánu — bez příplatku, bez starosti.</p></div>
+      <div class="feature reveal d2"><span class="feature-icon">🏙️</span><div class="feature-title">Centrum do 7 minut</div><p class="feature-text">Historické centrum Olomouce pěšky za 7 minut nebo tramvají za pouhé 2 minuty.</p></div>
+      <div class="feature reveal d3"><span class="feature-icon">🚋</span><div class="feature-title">Výborná doprava</div><p class="feature-text">Zastávka tramvaje a autobusu za rohem. Vlakové nádraží dostihnete za 11–18 minut.</p></div>
+      <div class="feature reveal d1"><span class="feature-icon">🏠</span><div class="feature-title">Plně vybaveno</div><p class="feature-text">Kuchyňka, pračka, sušička, WiFi, televize — vše pro pohodlný krátký i delší pobyt.</p></div>
+      <div class="feature reveal d2"><span class="feature-icon">👶</span><div class="feature-title">Vstřícní k rodinám</div><p class="feature-text">Dětská postýlka zdarma, dítě do 3 let zdarma, park s hřištěm jen 2 minuty od apartmánu.</p></div>
+      <div class="feature reveal d3"><span class="feature-icon">🎁</span><div class="feature-title">Dárkový poukaz</div><p class="feature-text">Obdarujte někoho blízkého — poukaz na pobyt v Olomouci jako originální dárek.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RECENZE -->
+<section id="recenze">
+  <div class="container">
+    <div class="section-eyebrow reveal" data-key="rev_eye">Hosté o nás</div>
+    <h2 class="section-title reveal d1" data-key="rev_title">Co říkají <em>hosté</em></h2>
+    <div class="section-rule reveal d2"></div>
+    <div class="reviews-grid">
+      <div class="review reveal d1">
+        <div class="review-stripe"></div>
+        <span class="review-quote">"</span>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Nádherný apartmán, čistý a útulný. Parkování zdarma je obrovský plus. Určitě se vrátíme!</p>
+        <div class="review-rule"></div>
+        <div class="review-author">Markéta K.</div>
+        <div class="review-date">Praha · Booking.com</div>
+      </div>
+      <div class="review reveal d2">
+        <div class="review-stripe"></div>
+        <span class="review-quote">"</span>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Skvělá poloha, vybavení na vysoké úrovni. Majitelé jsou velmi ochotní. Tramvaj hned za rohem.</p>
+        <div class="review-rule"></div>
+        <div class="review-author">Tomáš R.</div>
+        <div class="review-date">Brno · Google</div>
+      </div>
+      <div class="review reveal d3">
+        <div class="review-stripe"></div>
+        <span class="review-quote">"</span>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Vše funguje, čisto, ticho. Centrum dostupné snadno. Absolutně doporučuji všem, kdo jedou do Olomouce.</p>
+        <div class="review-rule"></div>
+        <div class="review-author">Jana S.</div>
+        <div class="review-date">Ostrava · Airbnb</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="container">
+    <div class="section-eyebrow reveal" data-key="con_eye">Spojte se s námi</div>
+    <h2 class="section-title reveal d1" data-key="con_title">Rezervace & <em>kontakt</em></h2>
+    <div class="section-rule reveal d2"></div>
+    <div class="contact-grid">
+      <div class="contact-items reveal-left">
+        <div class="contact-card">
+          <div class="contact-icon">📞</div>
+          <div class="contact-detail"><h4>Telefon</h4><a href="tel:+420728948738">+420 728 948 738</a></div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.25);">💬</div>
+          <div class="contact-detail"><h4>WhatsApp</h4><a href="https://wa.me/420728948738" target="_blank" style="color:#1a9e4a;">Napsat přes WhatsApp</a></div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-detail"><h4>E-mail</h4><a href="mailto:apartman4Uolomouc@seznam.cz">apartman4Uolomouc@seznam.cz</a></div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">📍</div>
+          <div class="contact-detail"><h4>Adresy</h4><p>Litovelská 2b, 779 00 Olomouc<br>Letců 29, 779 00 Olomouc</p></div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">🕐</div>
+          <div class="contact-detail"><h4>Check-in / Check-out</h4><p>Check-in: 14:00 – 21:00<br>Check-out: do 10:00</p></div>
+        </div>
+      </div>
+      <div class="contact-form-wrap reveal-right">
+        <div class="form-title">Napište nám</div>
+        <p class="form-sub">Rádi Vám poradíme s výběrem termínu a apartmánu.</p>
+        <div class="form-row">
+          <div class="form-group"><label>Jméno</label><input type="text" id="f-name" placeholder="Vaše jméno"></div>
+          <div class="form-group"><label>E-mail</label><input type="email" id="f-email" placeholder="vas@email.cz"></div>
+        </div>
+        <div class="form-group">
+          <label>Apartmán</label>
+          <select id="f-apt">
+            <option value="">-- Vyberte apartmán --</option>
+            <option>Apartmán 1 · Litovelská 2b (4 os.)</option>
+            <option>Apartmán 2 · Litovelská 2b (3 os.)</option>
+            <option>Apartmán 3 · Letců 29 (2 os.)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Příjezd</label><input type="date" id="f-from"></div>
+          <div class="form-group"><label>Odjezd</label><input type="date" id="f-to"></div>
+        </div>
+        <div class="form-group"><label>Zpráva</label><textarea id="f-msg" placeholder="Počet osob, dotazy..."></textarea></div>
+        <button class="form-submit" onclick="submitForm()">Odeslat poptávku</button>
+        <a href="https://wa.me/420728948738" target="_blank" class="btn-whatsapp">💬 Napsat přes WhatsApp</a>
+        <div class="form-success" id="form-success">✅ Zpráva odeslána! Ozveme se Vám co nejdříve.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">
+        <div class="logo-icon">4U</div>
+        <div class="logo-text"><strong>4U Olomouc</strong><span>Luxusní Apartmány</span></div>
+      </div>
+      <p class="footer-desc" data-key="footer_desc">Luxusní krátkodobé apartmány v srdci Olomouce. Parkování zdarma, dokonalá poloha a domácí pohoda na každém kroku.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/420728948738" target="_blank" class="footer-soc" style="color:#25d366;border-color:rgba(37,211,102,.25);">💬</a>
+        <a href="mailto:apartman4Uolomouc@seznam.cz" class="footer-soc">@</a>
+        <a href="tel:+420728948738" class="footer-soc">☎</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Apartmány</h5>
+      <ul>
+        <li><a href="#apartmany" onclick="switchApt(0)">Apartmán 1 · Litovelská</a></li>
+        <li><a href="#apartmany" onclick="switchApt(1)">Apartmán 2 · Litovelská</a></li>
+        <li><a href="#apartmany" onclick="switchApt(2)">Apartmán 3 · Letců 29</a></li>
+        <li><a href="#kontakt">Dárkový poukaz</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Kontakt</h5>
+      <ul>
+        <li><a href="tel:+420728948738">+420 728 948 738</a></li>
+        <li><a href="mailto:apartman4Uolomouc@seznam.cz">apartman4Uolomouc@seznam.cz</a></li>
+        <li><a href="#">Litovelská 2b, Olomouc</a></li>
+        <li><a href="#">Letců 29, Olomouc</a></li>
+        <li><a href="https://www.apartman4uolomouc.cz/checkinolomouc.html" target="_blank">Online Check-In</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 4U Olomouc — Všechna práva vyhrazena</span>
+    <span>Parkování zdarma · WiFi zdarma · Centrum do 7 minut</span>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <button class="lightbox-nav lightbox-prev" onclick="lbNav(-1)">‹</button>
+  <img src="" class="lightbox-img" id="lbImg" alt="">
+  <button class="lightbox-nav lightbox-next" onclick="lbNav(1)">›</button>
+</div>
+
+<script>
+/* HERO SLIDESHOW */
+(function(){
+  const slides = document.querySelectorAll('.hero-slide');
+  const dotsEl = document.getElementById('heroDots');
+  const currEl = document.getElementById('hCurr');
+  let hIdx = 0;
+  const total = slides.length;
+  slides.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'hero-dot' + (i===0?' active':'');
+    d.onclick = () => goHero(i);
+    dotsEl.appendChild(d);
+  });
+  function goHero(idx) {
+    slides[hIdx].classList.remove('active');
+    dotsEl.children[hIdx].classList.remove('active');
+    hIdx = idx;
+    slides[hIdx].classList.add('active');
+    dotsEl.children[hIdx].classList.add('active');
+    currEl.textContent = String(hIdx+1).padStart(2,'0');
+  }
+  setInterval(() => goHero((hIdx+1) % total), 5500);
+})();
+
+/* GALLERY */
+const galleries = [{current:0,count:10},{current:0,count:7},{current:0,count:11}];
+function initDots(){
+  galleries.forEach((g,gi) => {
+    const c = document.getElementById('dots'+gi); c.innerHTML='';
+    for(let i=0;i<g.count;i++){
+      const d = document.createElement('div');
+      d.className = 'gallery-dot'+(i===0?' active':'');
+      d.onclick = () => goToSlide(gi,i);
+      c.appendChild(d);
+    }
+  });
+}
+function updateCount(gi){
+  const g=galleries[gi], el=document.getElementById('cnt'+gi);
+  if(el) el.textContent=(g.current+1)+' / '+g.count;
+}
+function goToSlide(gi,idx){
+  const g=galleries[gi];
+  const gEl=document.getElementById('gallery'+gi);
+  const imgs=gEl.querySelectorAll('img'), dots=document.getElementById('dots'+gi).children;
+  imgs[g.current].classList.remove('active'); dots[g.current].classList.remove('active');
+  g.current=(idx+g.count)%g.count;
+  imgs[g.current].classList.add('active'); dots[g.current].classList.add('active');
+  updateCount(gi);
+}
+function galleryMove(gi,dir){goToSlide(gi,galleries[gi].current+dir);}
+setInterval(()=>{for(let i=0;i<3;i++){if(document.getElementById('apt'+i).classList.contains('active'))galleryMove(i,1);}},4500);
+
+/* TABS */
+function switchApt(idx){
+  document.querySelectorAll('.apt-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.apt-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  document.querySelectorAll('#apt'+idx+' .reveal-left,#apt'+idx+' .reveal-right').forEach(el=>el.classList.add('visible'));
+}
+
+/* LIGHTBOX */
+let lbImages=[],lbIdx=0;
+function openLightbox(src,imgs){lbImages=imgs;lbIdx=imgs.indexOf(src);document.getElementById('lbImg').src=src;document.getElementById('lightbox').classList.add('open');}
+function closeLightbox(e){if(!e||e.target.id==='lightbox'||e.target.classList.contains('lightbox-close'))document.getElementById('lightbox').classList.remove('open');}
+function lbNav(dir){lbIdx=(lbIdx+dir+lbImages.length)%lbImages.length;document.getElementById('lbImg').src=lbImages[lbIdx];}
+function bindGalleryClick(){
+  for(let gi=0;gi<3;gi++){
+    const gallery=document.getElementById('gallery'+gi);
+    const imgs=[...gallery.querySelectorAll('img')];
+    imgs.forEach(img=>{img.style.cursor='zoom-in';img.onclick=()=>openLightbox(img.src,imgs.map(x=>x.src));});
+  }
+}
+
+/* SCROLL REVEAL */
+const revEls = document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:.1}).observe || revEls.forEach(el => {});
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:.1});
+revEls.forEach(el => obs.observe(el));
+
+/* NAV */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>60));
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
+
+/* FORM */
+function submitForm(){
+  const n=document.getElementById('f-name').value,e=document.getElementById('f-email').value;
+  if(!n||!e){alert('Vyplňte prosím jméno a e-mail.');return;}
+  const s=document.getElementById('form-success');
+  s.style.display='block'; setTimeout(()=>s.style.display='none',6000);
+}
+
+/* CUSTOM CURSOR */
+(function(){
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  const dot    = document.getElementById('cursor-dot');
+  if(!cursor) return;
+
+  let mx=0, my=0, rx=0, ry=0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    // dot follows instantly
+    dot.style.transform = `translate(${mx}px,${my}px)`;
+  });
+
+  // ring follows with smooth lag
+  (function animateRing(){
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(animateRing);
+  })();
+
+  // hover state on interactive elements
+  const hoverEls = document.querySelectorAll('a,button,.apt-tab,.gallery-btn,.amenity,.feature,.review,.contact-card,.footer-soc,.hero-dot,.gallery-dot');
+  hoverEls.forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  // click effect
+  document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
+
+  // hide on mobile
+  document.addEventListener('touchstart', () => cursor.style.display='none', {once:true});
+})();
+
+
+/* ══ LANGUAGE SWITCHER ══ */
+const TRANSLATIONS = {
+  cs: {
+    nav_apts:    'Apartmány',
+    nav_why:     'Výhody',
+    nav_reviews: 'Recenze',
+    nav_contact: 'Kontakt',
+    nav_checkin: 'Check In',
+    nav_reserve: 'Rezervovat',
+    hero_kicker: 'Olomouc · Luxusní krátkodobé ubytování',
+    hero_sub:    'Parkování zdarma · WiFi · Centrum do 7 minut',
+    hero_btn1:   'Prohlédnout apartmány',
+    hero_btn2:   '+420 728 948 738',
+    apts_eye:    'Naše nabídka',
+    apts_title:  'Vyberte si <em>apartmán</em>',
+    tab0: 'Apartmán 1 · Litovelská 2b',
+    tab1: 'Apartmán 2 · Litovelská 2b',
+    tab2: 'Apartmán 3 · Letců 29',
+    why_eye:     'Proč 4U Olomouc',
+    why_title:   'Vše, co <em>potřebujete</em>',
+    rev_eye:     'Hosté o nás',
+    rev_title:   'Co říkají <em>hosté</em>',
+    con_eye:     'Spojte se s námi',
+    con_title:   'Rezervace & <em>kontakt</em>',
+    checkin_btn: 'Online Check-In →',
+    footer_desc: 'Luxusní krátkodobé apartmány v srdci Olomouce. Parkování zdarma, dokonalá poloha a domácí pohoda na každém kroku.',
+    stat0: 'Apartmány', stat1: 'Do centra pěšky', stat2: 'Parkování', stat3: 'Podpora hostů', stat4: 'Hodnocení hostů',
+  },
+  en: {
+    nav_apts:    'Apartments',
+    nav_why:     'Amenities',
+    nav_reviews: 'Reviews',
+    nav_contact: 'Contact',
+    nav_checkin: 'Check In',
+    nav_reserve: 'Book Now',
+    hero_kicker: 'Olomouc · Luxury short-stay apartments',
+    hero_sub:    'Free parking · WiFi · City centre in 7 min',
+    hero_btn1:   'View apartments',
+    hero_btn2:   '+420 728 948 738',
+    apts_eye:    'Our offer',
+    apts_title:  'Choose your <em>apartment</em>',
+    tab0: 'Apartment 1 · Litovelská 2b',
+    tab1: 'Apartment 2 · Litovelská 2b',
+    tab2: 'Apartment 3 · Letců 29',
+    why_eye:     'Why 4U Olomouc',
+    why_title:   'Everything you <em>need</em>',
+    rev_eye:     'Our guests',
+    rev_title:   'What guests <em>say</em>',
+    con_eye:     'Get in touch',
+    con_title:   'Booking & <em>contact</em>',
+    checkin_btn: 'Online Check-In →',
+    footer_desc: 'Luxury short-stay apartments in the heart of Olomouc. Free parking, perfect location and home comfort at every step.',
+    stat0: 'Apartments', stat1: 'Walk to centre', stat2: 'Parking', stat3: 'Guest support', stat4: 'Guest rating',
+  },
+  de: {
+    nav_apts:    'Apartments',
+    nav_why:     'Ausstattung',
+    nav_reviews: 'Bewertungen',
+    nav_contact: 'Kontakt',
+    nav_checkin: 'Check In',
+    nav_reserve: 'Buchen',
+    hero_kicker: 'Olomouc · Luxus-Kurzzeitapartments',
+    hero_sub:    'Kostenloses Parken · WLAN · Zentrum in 7 Min.',
+    hero_btn1:   'Apartments ansehen',
+    hero_btn2:   '+420 728 948 738',
+    apts_eye:    'Unser Angebot',
+    apts_title:  'Wählen Sie Ihr <em>Apartment</em>',
+    tab0: 'Apartment 1 · Litovelská 2b',
+    tab1: 'Apartment 2 · Litovelská 2b',
+    tab2: 'Apartment 3 · Letců 29',
+    why_eye:     'Warum 4U Olomouc',
+    why_title:   'Alles, was Sie <em>brauchen</em>',
+    rev_eye:     'Unsere Gäste',
+    rev_title:   'Was Gäste <em>sagen</em>',
+    con_eye:     'Kontaktieren Sie uns',
+    con_title:   'Buchung & <em>Kontakt</em>',
+    checkin_btn: 'Online Check-In →',
+    footer_desc: 'Luxus-Kurzzeitapartments im Herzen von Olomouc. Kostenloses Parken, perfekte Lage und Wohnkomfort auf Schritt und Tritt.',
+    stat0: 'Apartments', stat1: 'Zu Fuß ins Zentrum', stat2: 'Parken', stat3: 'Gästebetreuung', stat4: 'Gästebewertung',
+  }
+};
+
+function setLang(lang) {
+  const t = TRANSLATIONS[lang];
+  if (!t) return;
+
+  // lang buttons
+  document.querySelectorAll('.lb').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+  // nav links (by data-key)
+  const setTxt = (sel, html) => { const el = document.querySelector(sel); if(el) el.innerHTML = html; };
+  setTxt('[data-key="nav_apts"]',    t.nav_apts);
+  setTxt('[data-key="nav_why"]',     t.nav_why);
+  setTxt('[data-key="nav_reviews"]', t.nav_reviews);
+  setTxt('[data-key="nav_contact"]', t.nav_contact);
+  setTxt('[data-key="nav_checkin"]', t.nav_checkin);
+  setTxt('[data-key="nav_reserve"]', t.nav_reserve);
+
+  // hero
+  setTxt('[data-key="hero_kicker"]', t.hero_kicker);
+  setTxt('[data-key="hero_sub"]',    t.hero_sub);
+  setTxt('[data-key="hero_btn1"]',   t.hero_btn1);
+  setTxt('[data-key="hero_btn2"]',   t.hero_btn2);
+
+  // section headings
+  setTxt('[data-key="apts_eye"]',   t.apts_eye);
+  setTxt('[data-key="apts_title"]', t.apts_title);
+  setTxt('[data-key="why_eye"]',    t.why_eye);
+  setTxt('[data-key="why_title"]',  t.why_title);
+  setTxt('[data-key="rev_eye"]',    t.rev_eye);
+  setTxt('[data-key="rev_title"]',  t.rev_title);
+  setTxt('[data-key="con_eye"]',    t.con_eye);
+  setTxt('[data-key="con_title"]',  t.con_title);
+  setTxt('[data-key="checkin_btn"]',t.checkin_btn);
+  setTxt('[data-key="footer_desc"]',t.footer_desc);
+
+  // tabs
+  document.querySelectorAll('.apt-tab').forEach((tab, i) => {
+    const dot = tab.querySelector('.apt-tab-dot');
+    tab.innerHTML = '';
+    if(dot) tab.appendChild(dot.cloneNode());
+    tab.appendChild(document.createTextNode(t['tab'+i]));
+    tab.onclick = () => switchApt(i);
+  });
+
+  // stats labels
+  document.querySelectorAll('.stat-label').forEach((el, i) => {
+    if(t['stat'+i]) el.textContent = t['stat'+i];
+  });
+
+  // html lang attr
+  document.documentElement.lang = lang;
+}
+
+/* INIT */
+initDots();
+galleries.forEach((_,i)=>updateCount(i));
+bindGalleryClick();
+setTimeout(()=>{
+  document.querySelectorAll('#apt0 .reveal-left,#apt0 .reveal-right').forEach(el=>el.classList.add('visible'));
+},300);
+</script>
+</body>
+</html>
