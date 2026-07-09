@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apartmán 3 — Letců 29 | 4U Olomouc</title>
+<meta name="description" content="Útulný dvoulůžkový studiový apartmán 24 m² na ulici Letců 29 v Olomouci. Parkování u domu, mazlíčci po domluvě, tramvaj 30 sekund.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══ PRELOADER ═══ -->
+<div id="loader" aria-hidden="true">
+  <div class="loader-mark">
+    <svg viewBox="0 0 84 64" aria-hidden="true">
+      <path d="M30 6 L8 42 H42 M30 6 V58"/>
+      <path d="M50 6 V40 a13 13 0 0 0 26 0 V6"/>
+    </svg>
+  </div>
+  <div class="loader-word">4U Olomouc</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand" aria-label="4U Olomouc — úvod">
+      <span class="mono">
+        <svg viewBox="0 0 84 64" width="38" height="29" aria-hidden="true">
+          <path d="M30 6 L8 42 H42 M30 6 V58"/>
+          <path d="M50 6 V40 a13 13 0 0 0 26 0 V6"/>
+        </svg>
+      </span>
+      <span class="brand-name">4U Olomouc<small>Luxusní apartmány</small></span>
+    </a>
+    <ul class="nav-menu">
+      <li><a href="index.html#apartmany" class="active">Apartmány</a></li>
+      <li><a href="index.html#vyhody">Výhody</a></li>
+      <li><a href="index.html#recenze">Recenze</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="index.html#kontakt">Kontakt</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a class="nav-tel" href="tel:+420728948738">+420 728 948 738</a>
+      <a class="btn brass" href="checkinolomouc.html">Online check-in</a>
+      <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mmenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ MOBILE MENU ═══ -->
+<div class="mmenu" id="mmenu">
+  <div class="mmenu-inner">
+    <div class="mmenu-eyebrow">Menu</div>
+    <ul class="mmenu-links">
+      <li><a href="index.html">Úvod</a></li>
+      <li><a href="index.html#apartmany">Apartmány</a></li>
+      <li><a href="index.html#vyhody">Výhody</a></li>
+      <li><a href="index.html#recenze">Recenze</a></li>
+      <li><a href="faq.html">Časté dotazy</a></li>
+      <li><a href="index.html#kontakt">Kontakt</a></li>
+      <li><a href="checkinolomouc.html">Online check-in</a></li>
+    </ul>
+    <div class="mmenu-foot">
+      <a class="big" href="tel:+420728948738">+420 728 948 738</a>
+      <a class="big" href="mailto:apartman4Uolomouc@seznam.cz">apartman4Uolomouc@seznam.cz</a>
+      <div class="partner">
+        Partnerské apartmány v centru
+        <a href="https://www.4ucentreapartments.cz" target="_blank" rel="noopener">4U Centre Apartments →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DETAIL ═══ -->
+<main>
+  <div class="wrap">
+    <div class="detail-grid">
+
+      <div class="gallery rv">
+        <div class="gal-main" id="galMain" aria-label="Fotogalerie — klikněte pro zvětšení">
+          <img src="img/apartman03/1.jpg" alt="Apartmán 3 — fotografie 1" class="on">
+          <img src="img/apartman03/2.jpg" alt="Apartmán 3 — fotografie 2">
+          <img src="img/apartman03/3.jpg" alt="Apartmán 3 — fotografie 3">
+          <img src="img/apartman03/4.jpg" alt="Apartmán 3 — fotografie 4">
+          <img src="img/apartman03/5.jpg" alt="Apartmán 3 — fotografie 5">
+          <img src="img/apartman03/6.jpg" alt="Apartmán 3 — fotografie 6">
+          <img src="img/apartman03/7.jpg" alt="Apartmán 3 — fotografie 7">
+          <img src="img/apartman03/8.jpg" alt="Apartmán 3 — fotografie 8">
+          <img src="img/apartman03/9.jpg" alt="Apartmán 3 — fotografie 9">
+          <img src="img/apartman03/10.jpg" alt="Apartmán 3 — fotografie 10">
+          <img src="img/apartman03/11.jpg" alt="Apartmán 3 — fotografie 11">
+          <button class="gal-nav prev" onclick="galMove(-1)" aria-label="Předchozí fotografie">‹</button>
+          <button class="gal-nav next" onclick="galMove(1)" aria-label="Další fotografie">›</button>
+          <span class="gal-count" id="galCount">1 / 11</span>
+        </div>
+        <div class="gal-thumbs" id="galThumbs"></div>
+      </div>
+
+      <div class="rv rv-d2">
+        <p style="font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;"><a href="index.html" style="text-decoration:none;color:inherit;">Úvod</a> &nbsp;/&nbsp; <a href="index.html#apartmany" style="text-decoration:none;color:inherit;">Apartmány</a> &nbsp;/&nbsp; Apartmán 3</p>
+        <div class="d-eyebrow">Letců 29, Olomouc · Přízemí</div>
+        <h1 class="d-title">Apartmán 3</h1>
+        <p class="d-sub">Dvoulůžkový studiový apartmán · 24 m²</p>
+        <p class="d-desc">Útulný studiový apartmán jen 30 sekund od tramvajové a autobusové zastávky, 1 minutu od Fakulty tělesné kultury UP a centra Baluo. Do centra tramvají za 8 minut. Parkování přímo u domu. Domácí mazlíčci jsou vítáni po předchozí domluvě.</p>
+
+        <div class="d-specs">
+          <div class="d-spec"><b>24 m²</b><span>Plocha</span></div>
+          <div class="d-spec"><b>2</b><span>Osoby</span></div>
+          <div class="d-spec"><b>U domu</b><span>Parkování</span></div>
+          <div class="d-spec"><b>Ano</b><span>Mazlíčci</span></div>
+        </div>
+
+        <h2 class="d-h">Vybavení</h2>
+        <div class="amen">
+          <span>WiFi</span>
+          <span>Kuchyňka</span>
+          <span>Indukční vařič</span>
+          <span>Mikrovlnná trouba</span>
+          <span>Chladnička</span>
+          <span>Pračka</span>
+          <span>Sušička</span>
+          <span>Žehlička</span>
+          <span>Fén</span>
+          <span>Zvířata po domluvě</span>
+        </div>
+
+        <h2 class="d-h">Ceník</h2>
+        <table class="prices">
+          <thead><tr><th>Počet osob</th><th style="text-align:right;">Cena za noc (do 31. 5. 2026)</th></tr></thead>
+          <tbody>
+            <tr><td>2 osoby</td><td>1 490 Kč</td></tr>
+            <tr><td>1 osoba</td><td>1 390 Kč</td></tr>
+          </tbody>
+        </table>
+        <div class="d-notes">Minimální délka pobytu 2 noci · Sleva 5 % při pobytu na 4 a více nocí · Mazlíček 280 Kč / pobyt.<br>Check-in: 14:00 – 21:00 · Check-out: do 10:00 (do 13:00 za příplatek 200 Kč) · Dítě do 3 let zdarma.</div>
+
+        <div class="d-cta">
+          <a href="tel:+420728948738" class="btn">Rezervovat · +420 728 948 738</a>
+          <a href="checkinolomouc.html" class="btn ghost">Online check-in <span class="arr">→</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ DALŠÍ APARTMÁNY ═══ -->
+  <section class="other-apts" style="margin-top:100px;">
+    <div class="wrap">
+      <div class="sec-head left rv">
+        <div class="sec-eyebrow">Podívejte se také</div>
+        <h2 class="sec-title">Další <em>apartmány</em></h2>
+      </div>
+      <div class="apt-grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));max-width:960px;">
+      <a href="apartman1.html" class="apt-card rv rv-d1" data-tilt="6">
+        <div class="apt-card-media">
+          <img src="img/apartman01/1.jpg" alt="Apartmán 1" loading="lazy">
+          <span class="apt-tag">40 m²</span>
+        </div>
+        <div class="apt-card-body">
+          <h3>Apartmán 1</h3>
+          <p class="apt-sub">Čtyřlůžkový studiový apartmán · Litovelská 2b</p>
+        </div>
+        <div class="apt-card-cta"><span>Zobrazit detail</span><span>→</span></div>
+      </a>
+      <a href="apartman2.html" class="apt-card rv rv-d2" data-tilt="6">
+        <div class="apt-card-media">
+          <img src="img/apartman02/1.jpg" alt="Apartmán 2" loading="lazy">
+          <span class="apt-tag">34 m²</span>
+        </div>
+        <div class="apt-card-body">
+          <h3>Apartmán 2</h3>
+          <p class="apt-sub">Tříosobový studiový apartmán · Litovelská 2b</p>
+        </div>
+        <div class="apt-card-cta"><span>Zobrazit detail</span><span>→</span></div>
+      </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Fotogalerie">
+  <button class="lb-x" onclick="lbClose()" aria-label="Zavřít">✕</button>
+  <button class="lb-nav prev" onclick="lbMove(-1)" aria-label="Předchozí">‹</button>
+  <img src="" alt="Fotografie apartmánu" id="lbImg">
+  <button class="lb-nav next" onclick="lbMove(1)" aria-label="Další">›</button>
+  <span class="lb-count" id="lbCount"></span>
+</div>
+
+<!-- ═══ PARTNER ═══ -->
+<div class="partner-strip">
+  <div class="in">
+    <span>Partnerské apartmány přímo v centru Olomouce</span>
+    <a href="https://www.4ucentreapartments.cz" target="_blank" rel="noopener">4U Centre Apartments <span class="arr">→</span></a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="foot-top">
+    <div>
+      <a href="index.html" class="foot-brand">
+        <span class="mono">
+          <svg viewBox="0 0 84 64" width="38" height="29" aria-hidden="true">
+          <path d="M30 6 L8 42 H42 M30 6 V58"/>
+          <path d="M50 6 V40 a13 13 0 0 0 26 0 V6"/>
+        </svg>
+        </span>
+        <span class="brand-name">4U Olomouc<small>Luxusní apartmány</small></span>
+      </a>
+      <p class="foot-desc">Luxusní krátkodobé apartmány v srdci Olomouce. Parkování zdarma, dokonalá poloha a domácí pohoda na každém kroku.</p>
+    </div>
+    <div class="foot-col">
+      <h5>Apartmány</h5>
+      <ul>
+        <li><a href="apartman1.html">Apartmán 1 · Litovelská 2b</a></li>
+        <li><a href="apartman2.html">Apartmán 2 · Litovelská 2b</a></li>
+        <li><a href="apartman3.html">Apartmán 3 · Letců 29</a></li>
+        <li><a href="https://www.4ucentreapartments.cz" target="_blank" rel="noopener">Partner · 4U Centre Apartments ↗</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Informace</h5>
+      <ul>
+        <li><a href="checkinolomouc.html">Online check-in</a></li>
+        <li><a href="faq.html">Časté dotazy</a></li>
+        <li><a href="obchodni-podminky.html">Obchodní podmínky</a></li>
+        <li><a href="cookies.html">Zásady cookies</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Kontakt</h5>
+      <ul>
+        <li><a href="tel:+420728948738">+420 728 948 738</a></li>
+        <li><a href="mailto:apartman4Uolomouc@seznam.cz">apartman4Uolomouc@seznam.cz</a></li>
+        <li><a href="https://maps.google.com/?q=Litovelská+2b+Olomouc" target="_blank" rel="noopener">Litovelská 2b, Olomouc</a></li>
+        <li><a href="https://maps.google.com/?q=Letců+29+Olomouc" target="_blank" rel="noopener">Letců 29, Olomouc</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-bottom-in">
+      <span>© <span id="year">2026</span> 4U Olomouc — Všechna práva vyhrazena</span>
+      <div class="foot-legal">
+        <a href="obchodni-podminky.html">Obchodní podmínky</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="https://www.4ucentreapartments.cz" target="_blank" rel="noopener">4U Centre Apartments</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ WHATSAPP ═══ -->
+<a href="https://wa.me/420728948738" target="_blank" rel="noopener" class="wa-float" aria-label="Napsat na WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.9-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.1.2-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.3 1.1 2.3 1.5 2.6 1.6.3.2.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.3.1.2.1.7-.2 1.2Z"/></svg>
+</a>
+
+<!-- ═══ COOKIE BAR ═══ -->
+<div class="cookiebar" id="cookiebar" role="dialog" aria-label="Nastavení cookies">
+  <h4>Používáme cookies</h4>
+  <p>Tento web používá pouze nezbytné technické cookies pro správné fungování stránek. Více informací najdete v <a href="cookies.html">zásadách cookies</a>.</p>
+  <div class="row">
+    <button class="btn" onclick="cookieChoice('accepted')">Rozumím</button>
+    <button class="btn ghost" onclick="cookieChoice('necessary')">Pouze nezbytné</button>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
